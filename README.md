@@ -16,8 +16,10 @@ Fase 1 feita: site público em Laravel, visualmente idêntico ao original.
 Fase 2 feita: MySQL, formulário de contacto a gravar mensagens, login e
 caixa de entrada em `/admin`.
 
-Por fazer: conteúdo dinâmico (projetos, serviços, compromissos), idiomas em
-URL, uploads, cache, testes e publicação.
+Fase 3 feita: serviços, projetos, compromissos e stack vêm da base de
+dados; idiomas em URL (`/pt`, `/en`, `/es`); CRUD no backoffice.
+
+Por fazer: uploads de imagens, cache, testes e publicação.
 
 ## Precisa de
 
@@ -58,7 +60,7 @@ ADMIN_PASSWORD=escolhe-uma-palavra-passe
 APP_TIMEZONE=Europe/Lisbon
 ```
 
-3. Criar tabelas, utilizador admin e assets:
+3. Criar tabelas, utilizador admin, conteúdo e assets:
 
 ```bash
 php artisan migrate
@@ -67,74 +69,86 @@ npm run build
 php artisan serve
 ```
 
-- Site: `http://localhost:8000`
+- Site PT: `http://localhost:8000/pt`
+- Site EN: `http://localhost:8000/en`
+- Site ES: `http://localhost:8000/es`
+- Raiz `/` redireciona para o idioma da sessão ou do browser
 - Backoffice: `http://localhost:8000/admin/login`
 
 Durante o desenvolvimento é mais prático deixar `npm run dev` a correr numa
 consola. Aí não é preciso o `npm run build`.
 
+## Idiomas
+
+Cada língua tem URL próprio. O middleware `SetLocale` define o locale da
+aplicação a partir do segmento `{locale}`.
+
+- Interface (navegação, botões, hero, formulário, etc.): ficheiros
+  `lang/pt.json`, `lang/en.json`, `lang/es.json`
+- Conteúdo editável (serviços, projetos, compromissos): tabelas de
+  tradução na base de dados, uma linha por locale
+
+O seletor do header mantém o aspeto antigo, mas cada opção é um link para
+a mesma página noutro idioma. Há `hreflang` e `canonical` por versão.
+
 ## Backoffice
 
 Área autenticada em `/admin`. Só existe um utilizador, o que está no seeder.
-Não há papéis admin/editor: quem entra gere tudo.
 
-O que dá para fazer nesta fase:
+- Painel com contagens
+- Mensagens: lista, pesquisa, estados, export CSV
+- Serviços, projetos, compromissos e tecnologias: CRUD com separadores
+  PT / EN / ES no mesmo formulário
 
-- ver o painel com contagens e as últimas mensagens
-- listar, pesquisar e filtrar mensagens por estado
-- abrir o detalhe (passa a "lida" automaticamente)
-- marcar como nova, lida, respondida ou spam
-- exportar CSV
-- apagar (soft delete)
-
-O formulário público posta para `POST /contacto`, com CSRF, honeypot e limite
-de 5 pedidos por minuto. O consentimento RGPD fica datado na linha da
-mensagem.
+O formulário público posta para `POST /{locale}/contacto`, com CSRF,
+honeypot e limite de 5 pedidos por minuto.
 
 ## Como está organizado
 
 ```
 app/Http/Controllers/
+  HomeController.php            página pública com dados da BD
   ContactController.php         grava a mensagem do formulário
-  Admin/                        login, painel e caixa de entrada
-app/Models/Message.php
-app/Http/Requests/StoreContactMessageRequest.php
+  LocaleRedirectController.php  / → /pt|/en|/es
+  Admin/                        login, painel, mensagens e CRUDs
+app/Models/                     Message, Service, Project, Commitment, Technology…
+lang/                           pt.json, en.json, es.json
 resources/views/
-  components/layout.blade.php   site público
-  admin/                        vistas do backoffice
-  sections/                     hero, sobre, serviços, …
-resources/css/app.css
-resources/js/i18n.js
-resources/js/main.js
+  components/layout.blade.php
+  admin/
+  sections/                     hero, sobre, serviços, projetos…
+  partials/icons/               ícones SVG dos serviços e da stack
+  partials/project-media/       ilustrações SVG dos projetos
 ```
 
 ## Decisões
 
-**Uma secção por ficheiro, sem componentes por enquanto.** As secções ainda
-são HTML fixo. Transformá-las em componentes com parâmetros agora seria
-inventar uma interface antes de saber que dados vêm da base de dados. Isso
-faz-se na fase 3.
+**Conteúdo na BD, rótulos em ficheiros de idioma.** O que mudas no
+backoffice (títulos de projetos, preços, compromissos) vive em tabelas.
+O que é estrutura da página (navegação, botões, mensagens de erro) vive
+em `lang/*.json`. Misturar as duas coisas numa só tabela torna o layout
+difícil de manter.
 
-**Vite em vez do script de build antigo.** O Vite já põe o hash no nome do
-ficheiro. O script de versionamento do site estático deixou de fazer falta.
+**Traduções em tabelas próprias, não colunas `titulo_pt`.** Cada locale
+é uma linha. Acrescentar um idioma novo não exige alterar o esquema.
 
-**O JavaScript não foi reescrito.** Continua nativo. O `main.js` só ganhou o
-envio do token CSRF e do idioma atual no POST do formulário.
+**Preços em cêntimos.** `price_cents` evita floats. A vista formata para
+euros.
 
-**Sem papéis nem registo de atividade.** Só há um utilizador. Auditoria de
-"quem alterou o quê" com uma só pessoa é peso morto.
+**Ícones e mockups em partials Blade, não na BD.** O backoffice escolhe
+uma chave (`monitor`, `dashboard`…). O SVG continua no código, versionado
+com o resto do site.
 
-**Auth à mão, sem Breeze.** Login, logout e middleware `auth` bastam. Menos
-código gerado a limpar depois.
+**Idioma na URL, não só em JavaScript.** Assim o Google indexa as três
+versões e um link partilhado chega no idioma certo.
 
-**Nomes de campos do formulário em português, colunas da BD em inglês.** O
-pedido chega como `nome` / `mensagem` porque é o que o HTML já tinha. O
-modelo grava em `name` / `body`. A tradução fica no controller, num sítio só.
+**Sem papéis nem registo de atividade.** Só há um utilizador.
+
+**Auth à mão, sem Breeze.** Login, logout e middleware `auth` bastam.
 
 ## Fases
 
 1. Laravel a servir o site atual, sem base de dados. Feito.
 2. MySQL, formulário a gravar e backoffice com caixa de entrada. Feito.
-3. Projetos, serviços e compromissos vindos da base de dados, com
-   traduções, e idiomas em URL (`/pt/`, `/en/`, `/es/`).
+3. Conteúdo na BD, CRUD e idiomas em URL. Feito.
 4. Upload de imagens, cache, testes e publicação no alojamento final.
