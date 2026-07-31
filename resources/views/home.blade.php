@@ -1,0 +1,10 @@
+<x-layout>
+  @include('sections.hero')
+  @include('sections.marquee')
+  @include('sections.about')
+  @include('sections.services')
+  @include('sections.projects')
+  @include('sections.stack')
+  @include('sections.partnership')
+  @include('sections.contact')
+</x-layout>
