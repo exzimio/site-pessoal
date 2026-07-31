@@ -1,0 +1,746 @@
+/* ==========================================================================
+   app.css — fonte única de estilos (Tailwind CSS v4)
+   Compilado pelo Vite: npm run dev em desenvolvimento, npm run build para publicar.
+   --------------------------------------------------------------------------
+   Organização:
+   1. Import do Tailwind + variantes
+   2. Design tokens (paleta dark = padrão, light = override)
+   3. Mapeamento dos tokens para utilitários Tailwind (@theme)
+   4. Base: reset fino, tipografia, scrollbar, acessibilidade
+   5. Componentes: botões, cards, badges, secções, carrossel
+   6. Animações de scroll e utilitários próprios
+   ========================================================================== */
+
+@import "tailwindcss";
+
+/* Variante `light:` — o tema padrão é dark, o light é opt-in via
+   `data-theme="light"` no <html>. Permite escrever `light:opacity-70`. */
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+
+/* --------------------------------------------------------------------------
+   2. DESIGN TOKENS
+   Um único ponto de verdade para cores. Trocar de tema = trocar variáveis,
+   sem duplicar utilitários no HTML.
+   -------------------------------------------------------------------------- */
+:root {
+  /* Superfícies */
+  --bg: #0a0a0b;
+  --bg-soft: #0d0e11;
+  --surface: #101216;
+  --surface-hover: #16181e;
+
+  /* Traços */
+  --border: rgb(255 255 255 / 0.08);
+  --border-strong: rgb(255 255 255 / 0.16);
+
+  /* Texto */
+  --fg: #f4f4f5;
+  --fg-muted: #a1a1aa;
+  --fg-subtle: #71717a;
+
+  /* Acentos — usados com moderação (CTAs, links, detalhes) */
+  --accent: #00e59a;
+  --accent-contrast: #04120d; /* texto sobre fundo de acento */
+  --accent-2: #7c5cff;
+  --accent-glow: rgb(0 229 154 / 0.35);
+
+  /* Sombras compostas para profundidade em fundo escuro */
+  --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.04) inset,
+    0 20px 40px -24px rgb(0 0 0 / 0.8);
+  --shadow-glow: 0 0 0 1px rgb(0 229 154 / 0.22),
+    0 12px 48px -12px var(--accent-glow);
+
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-soft: #f7f7f8;
+  --surface: #ffffff;
+  --surface-hover: #fafafa;
+
+  --border: rgb(9 9 11 / 0.1);
+  --border-strong: rgb(9 9 11 / 0.18);
+
+  --fg: #09090b;
+  --fg-muted: #52525b;
+  --fg-subtle: #71717a;
+
+  /* Verde escurecido para manter contraste AA sobre branco */
+  --accent: #00875a;
+  --accent-contrast: #ffffff;
+  --accent-2: #5b3df5;
+  --accent-glow: rgb(0 135 90 / 0.22);
+
+  --shadow-card: 0 1px 2px 0 rgb(9 9 11 / 0.04),
+    0 12px 32px -20px rgb(9 9 11 / 0.18);
+  --shadow-glow: 0 0 0 1px rgb(0 135 90 / 0.28),
+    0 12px 40px -16px var(--accent-glow);
+
+  color-scheme: light;
+}
+
+/* --------------------------------------------------------------------------
+   3. TOKENS -> TAILWIND
+   `inline` faz os utilitários apontarem para a variável (e não copiarem o
+   valor), o que é o que permite a troca de tema em runtime.
+   -------------------------------------------------------------------------- */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+
+  --color-fg: var(--fg);
+  --color-muted: var(--fg-muted);
+  --color-subtle: var(--fg-subtle);
+
+  --color-accent: var(--accent);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-accent-2: var(--accent-2);
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui,
+    sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* Escala tipográfica de display, fluida (clamp) para responsividade real */
+  --text-display-sm: clamp(1.75rem, 1.2rem + 2.2vw, 2.5rem);
+  --text-display: clamp(2.25rem, 1.4rem + 3.4vw, 3.75rem);
+  --text-display-lg: clamp(2.75rem, 1rem + 7vw, 5.5rem);
+
+  --radius-card: 1rem;
+
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-drift: drift 22s ease-in-out infinite alternate;
+  --animate-pulse-ring: pulse-ring 2.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-caret: caret 1s steps(2, start) infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes drift {
+    from {
+      transform: translate3d(-4%, -2%, 0) scale(1);
+    }
+    to {
+      transform: translate3d(4%, 3%, 0) scale(1.15);
+    }
+  }
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.9);
+      opacity: 0.7;
+    }
+    70%,
+    100% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+  @keyframes caret {
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. BASE
+   -------------------------------------------------------------------------- */
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Compensa o header fixo quando se navega por âncoras */
+    scroll-padding-top: 6rem;
+    -webkit-tap-highlight-color: transparent;
+    /* `clip` (em vez de `hidden`) corta transbordos horizontais de halos e
+       animações sem transformar a raiz num contentor de scroll — o que
+       manteria `position: sticky` a funcionar. */
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  /* Foco visível e consistente para navegação por teclado */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Scrollbar discreta, alinhada ao tema */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 999px;
+    border: 2px solid var(--bg);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--fg-subtle);
+  }
+
+  /* As imagens do portfólio nunca devem "empurrar" o layout */
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  /* Respeitar preferência do sistema: sem movimento, sem animações */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. COMPONENTES
+   -------------------------------------------------------------------------- */
+@layer components {
+  /* ---- Layout ---- */
+  .container-x {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .section {
+    @apply relative py-20 sm:py-28 lg:py-36;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-accent;
+  }
+
+  .section-title {
+    @apply mt-5 text-display-sm sm:text-display;
+  }
+
+  .section-lead {
+    @apply mt-5 max-w-2xl text-base leading-relaxed text-muted sm:text-lg;
+  }
+
+  /* Linha divisória com fade nas pontas */
+  .rule {
+    @apply h-px w-full;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--border-strong),
+      transparent
+    );
+  }
+
+  /* ---- Botões ---- */
+  .btn {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-full
+           px-6 py-3 text-sm font-semibold whitespace-nowrap
+           transition-all duration-300 ease-out select-none;
+  }
+
+  .btn-primary {
+    background-color: var(--accent);
+    color: var(--accent-contrast);
+    box-shadow: 0 8px 30px -10px var(--accent-glow);
+  }
+  .btn-primary:hover {
+    box-shadow: 0 12px 40px -8px var(--accent-glow);
+    transform: translateY(-2px);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-ghost {
+    @apply border text-fg;
+    border-color: var(--border-strong);
+    background-color: transparent;
+  }
+  .btn-ghost:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  /* ---- Superfícies / Cards ---- */
+  .card {
+    @apply relative overflow-hidden rounded-card border p-6 sm:p-7;
+    background-color: var(--surface);
+    box-shadow: var(--shadow-card);
+    transition: border-color 0.4s ease, box-shadow 0.4s ease,
+      transform 0.4s ease, background-color 0.4s ease;
+  }
+
+  /* Borda que "acende" + holofote que segue o rato (vars --mx/--my via JS) */
+  .card-glow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: radial-gradient(
+      340px circle at var(--mx, 50%) var(--my, 0%),
+      rgb(255 255 255 / 0.07),
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+
+  .card-glow:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in oklab, var(--accent) 45%, transparent);
+    box-shadow: var(--shadow-glow);
+    background-color: var(--surface-hover);
+  }
+
+  .card-glow:hover::before {
+    opacity: 1;
+  }
+
+  /* ---- Badges / pills ---- */
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-full border px-3 py-1.5
+           text-xs font-medium text-muted;
+    background-color: var(--surface);
+  }
+
+  .tech-badge {
+    @apply flex flex-col items-center justify-center gap-3 rounded-xl border
+           px-3 py-5 text-center text-xs font-medium text-muted;
+    background-color: var(--surface);
+    transition: transform 0.3s ease, border-color 0.3s ease,
+      box-shadow 0.3s ease, color 0.3s ease;
+  }
+  .tech-badge:hover {
+    transform: translateY(-4px);
+    color: var(--fg);
+    border-color: color-mix(in oklab, var(--accent) 50%, transparent);
+    box-shadow: var(--shadow-glow);
+  }
+  .tech-badge svg {
+    @apply h-8 w-8 transition-transform duration-300;
+    color: var(--fg-muted);
+  }
+  .tech-badge:hover svg {
+    color: var(--accent);
+    transform: scale(1.08);
+  }
+
+  /* ---- Links de navegação com sublinhado animado ---- */
+  .nav-link {
+    @apply relative py-1 text-sm font-medium text-muted transition-colors duration-200;
+  }
+  .nav-link:hover,
+  .nav-link[aria-current="true"] {
+    color: var(--fg);
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 100%;
+    background-color: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav-link:hover::after,
+  .nav-link[aria-current="true"]::after {
+    transform: scaleX(1);
+  }
+
+  /* ---- Seletor de idioma ---- */
+  .lang-menu {
+    @apply invisible absolute right-0 top-12 z-50 w-44 translate-y-1 rounded-xl
+           border p-1.5 opacity-0;
+    background-color: var(--surface);
+    box-shadow: var(--shadow-card), 0 24px 48px -24px rgb(0 0 0 / 0.5);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+  .lang-menu.is-open {
+    @apply visible translate-y-0 opacity-100;
+  }
+
+  .lang-option {
+    @apply flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left
+           text-sm text-muted transition-colors duration-200;
+  }
+  .lang-option:hover {
+    background-color: var(--surface-hover);
+    color: var(--fg);
+  }
+  .lang-option[aria-current="true"] {
+    color: var(--fg);
+  }
+  .lang-option[aria-current="true"] .lang-code {
+    color: var(--accent);
+  }
+  .lang-code {
+    @apply w-7 shrink-0 text-xs font-semibold uppercase tracking-wider text-subtle;
+  }
+
+  /* ---- Filtros do portfólio ---- */
+  .filter-btn {
+    @apply rounded-full border px-4 py-2 text-sm font-medium text-muted
+           transition-all duration-300;
+    background-color: transparent;
+  }
+  .filter-btn:hover {
+    color: var(--fg);
+    border-color: var(--border-strong);
+  }
+  .filter-btn[aria-pressed="true"] {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+  }
+
+  /* ---- Formulário ---- */
+  .field {
+    @apply w-full rounded-xl border px-4 py-3 text-sm text-fg
+           placeholder:text-subtle;
+    background-color: var(--bg-soft);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  .field[aria-invalid="true"] {
+    border-color: #f87171;
+  }
+
+  .label {
+    @apply mb-2 block text-xs font-semibold uppercase tracking-wider text-subtle;
+  }
+
+  .field-error {
+    @apply mt-1.5 hidden text-xs text-red-400;
+  }
+  .field-error.is-shown {
+    @apply block;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. UTILITÁRIOS PRÓPRIOS
+   -------------------------------------------------------------------------- */
+
+/* Texto com gradiente de acento */
+@utility text-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--accent) 10%,
+    var(--accent-2) 120%
+  );
+  background-clip: text;
+  color: transparent;
+  /* Evita corte de descendentes (g, y, p) por causa do clip */
+  padding-bottom: 0.08em;
+}
+
+/* Grelha técnica de fundo, com fade radial para não competir com o texto */
+@utility bg-grid {
+  background-image: linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+/* Máscara de fade para marquees e carrosséis */
+@utility mask-fade-x {
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+
+/* --------------------------------------------------------------------------
+   ANIMAÇÕES DE ENTRADA (scroll-triggered)
+   O estado inicial só é aplicado quando o JS está ativo (`html.js`), para o
+   conteúdo continuar visível se o JS falhar ou for bloqueado.
+   -------------------------------------------------------------------------- */
+.js .reveal {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+/* O deslize lateral só faz sentido quando a grelha se divide em colunas.
+   Em ecrãs estreitos a coluna ocupa toda a largura e o translateX criaria
+   scroll horizontal — por isso mantém-se vertical até ao breakpoint lg. */
+@media (min-width: 1024px) {
+  .js .reveal-left {
+    transform: translate3d(-32px, 0, 0);
+  }
+  .js .reveal-right {
+    transform: translate3d(32px, 0, 0);
+  }
+}
+
+.js .reveal-scale {
+  transform: scale(0.94);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* Entrada do hero: palavras divididas por JS em spans com máscara */
+.word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.06em;
+}
+.word-mask > span {
+  display: inline-block;
+  transform: translate3d(0, 110%, 0);
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.is-loaded .word-mask > span {
+  transform: none;
+}
+
+/* Elementos do hero que entram por fade simples após o load */
+.hero-fade {
+  opacity: 0;
+  transform: translate3d(0, 16px, 0);
+  transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.is-loaded .hero-fade {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal,
+  .word-mask > span,
+  .hero-fade {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Troca de idioma: o conteúdo esmorece durante a substituição do texto
+   (ver i18n.js). Só a opacidade muda, por isso o layout fica intacto. */
+main,
+footer,
+#site-header nav {
+  transition: opacity 0.18s ease;
+}
+.lang-switching main,
+.lang-switching footer,
+.lang-switching #site-header nav {
+  opacity: 0;
+}
+
+/* --------------------------------------------------------------------------
+   CURSOR PERSONALIZADO
+   Só em dispositivos com rato (pointer: fine) e apenas se o JS o ativar.
+   -------------------------------------------------------------------------- */
+@media (pointer: fine) {
+  .has-cursor,
+  .has-cursor a,
+  .has-cursor button,
+  .has-cursor [data-cursor] {
+    cursor: none;
+  }
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  border-radius: 999px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background-color: var(--accent);
+}
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1px solid var(--border-strong);
+  transition: opacity 0.3s ease, width 0.28s ease, height 0.28s ease,
+    margin 0.28s ease, border-color 0.28s ease, background-color 0.28s ease;
+}
+/* `cursor-ready` só é adicionado ao primeiro movimento do rato: evita que o
+   anel fique parado no centro do ecrã em quem chega e ainda não mexeu. */
+.has-cursor.cursor-ready .cursor-dot,
+.has-cursor.cursor-ready .cursor-ring {
+  opacity: 1;
+}
+/* Estado "hover" sobre elementos interativos */
+.cursor-ring.is-active {
+  width: 58px;
+  height: 58px;
+  margin: -29px 0 0 -29px;
+  border-color: var(--accent);
+  background-color: color-mix(in oklab, var(--accent) 12%, transparent);
+}
+
+/* --------------------------------------------------------------------------
+   CARROSSEL DE TESTEMUNHOS
+   Scroll-snap nativo (performante, acessível, funciona sem JS) + controlos JS.
+   -------------------------------------------------------------------------- */
+.slider {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.slider::-webkit-scrollbar {
+  display: none;
+}
+.slider > * {
+  scroll-snap-align: center;
+}
+
+@media (min-width: 768px) {
+  .slider {
+    grid-auto-columns: calc(50% - 0.625rem);
+  }
+}
+
+.dot {
+  height: 6px;
+  width: 22px;
+  border-radius: 999px;
+  background-color: var(--border-strong);
+  transition: background-color 0.3s ease, width 0.3s ease;
+}
+.dot[aria-current="true"] {
+  width: 38px;
+  background-color: var(--accent);
+}
+
+/* --------------------------------------------------------------------------
+   MISC
+   -------------------------------------------------------------------------- */
+
+/* Bloqueia o scroll do body quando o menu mobile está aberto */
+.is-menu-open body,
+body.is-locked {
+  overflow: hidden;
+}
+
+/* Cartões de projeto: overlay e zoom da imagem */
+.project-card .project-media img,
+.project-card .project-media svg {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.project-card:hover .project-media img,
+.project-card:hover .project-media svg {
+  transform: scale(1.06);
+}
+.project-card .project-overlay {
+  background: linear-gradient(
+    to top,
+    rgb(5 6 8 / 0.92) 0%,
+    rgb(5 6 8 / 0.55) 45%,
+    rgb(5 6 8 / 0.15) 100%
+  );
+  transition: opacity 0.5s ease;
+}
+.project-card:hover .project-overlay {
+  opacity: 1;
+}
+
+/* Estado de saída/entrada dos cartões ao filtrar por categoria */
+.project-card.is-filtered-out {
+  display: none;
+}

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Substituir pelo domínio final
+Sitemap: https://alexandremagno.dev/sitemap.xml

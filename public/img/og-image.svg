@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Space Grotesk, Inter, Segoe UI, sans-serif">
+  <!-- Cartao de partilha para redes sociais (1200x630).
+       Editar aqui e correr `npm run og` para regenerar o PNG que as redes leem. -->
+  <defs>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00e59a" />
+      <stop offset="100%" stop-color="#7c5cff" />
+    </linearGradient>
+    <radialGradient id="haloA" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#00e59a" stop-opacity="0.42" />
+      <stop offset="100%" stop-color="#00e59a" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="haloB" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#7c5cff" stop-opacity="0.38" />
+      <stop offset="100%" stop-color="#7c5cff" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0v48" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1" />
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="#0a0a0b" />
+  <rect width="1200" height="630" fill="url(#grid)" />
+  <circle cx="180" cy="80" r="420" fill="url(#haloA)" />
+  <circle cx="1080" cy="620" r="380" fill="url(#haloB)" />
+
+  <rect x="80" y="76" width="60" height="60" rx="14" fill="url(#brand)" />
+  <text x="110" y="118" font-size="32" font-weight="700" fill="#04120d" text-anchor="middle">A</text>
+  <text x="158" y="117" font-size="26" font-weight="600" fill="#f4f4f5">Alexandre Magno</text>
+
+  <rect x="80" y="196" width="345" height="42" rx="21" fill="#ffffff" fill-opacity="0.06" stroke="#ffffff" stroke-opacity="0.12" />
+  <circle cx="106" cy="217" r="5" fill="#00e59a" />
+  <text x="124" y="224" font-size="15" font-weight="500" fill="#a1a1aa" letter-spacing="1.6">DISPON&#205;VEL PARA PROJETOS</text>
+
+  <text x="80" y="322" font-size="60" font-weight="700" fill="#f4f4f5">Software moderno que</text>
+  <text x="80" y="392" font-size="60" font-weight="700" fill="#f4f4f5"><tspan fill="#00e59a">trabalha</tspan> para o seu neg&#243;cio.</text>
+
+  <text x="80" y="462" font-size="25" font-weight="400" fill="#a1a1aa" font-family="Inter, Segoe UI, sans-serif">Developer fullstack &#183; Sites, apps web e bases de dados</text>
+
+  <rect x="80" y="530" width="1040" height="1" fill="#ffffff" fill-opacity="0.1" />
+  <text x="80" y="578" font-size="22" font-weight="500" fill="#71717a" font-family="Inter, Segoe UI, sans-serif">alexandremagno.dev</text>
+  <text x="1120" y="578" font-size="22" font-weight="500" fill="#71717a" text-anchor="end" font-family="Inter, Segoe UI, sans-serif">Portugal &#183; Remoto</text>
+</svg>
