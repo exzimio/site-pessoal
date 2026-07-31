@@ -692,11 +692,35 @@
 
       setLoading(true);
       try {
+        const csrf = document
+          .querySelector('meta[name="csrf-token"]')
+          ?.getAttribute("content");
+
         const response = await fetch(endpoint, {
           method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+            ...(csrf ? { "X-CSRF-TOKEN": csrf } : {}),
+          },
+          credentials: "same-origin",
+          body: JSON.stringify({
+            ...data,
+            locale: window.I18N?.lang || "pt",
+          }),
         });
+
+        if (response.status === 422) {
+          const payload = await response.json().catch(() => ({}));
+          const fields = payload.errors || {};
+          Object.keys(fields).forEach((name) => showError(name, true));
+          setStatus(
+            t("form.statusReview") || "Reveja os campos assinalados, por favor.",
+            "error"
+          );
+          return;
+        }
 
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
 

@@ -137,15 +137,13 @@
       <div class="reveal reveal-right min-w-0" style="--reveal-delay: 100ms">
         <!--
           FORMULÁRIO
-          Sem backend configurado, o JS abre o cliente de email do
-          utilizador com tudo preenchido (fallback sempre funcional).
-          Para receber no servidor, coloque o endpoint em data-endpoint
-          (Formspree, Web3Forms, Netlify Forms...). Ver README.
+          O formulário posta para a rota Laravel /contacto. Se o pedido
+          falhar, o JS mostra o email de contacto como alternativa.
         -->
         <form
           id="contact-form"
           class="card p-6 sm:p-8"
-          data-endpoint=""
+          data-endpoint="{{ route('contact.store') }}"
           data-fallback-email="ola@alexandremagno.dev"
           novalidate
         >
