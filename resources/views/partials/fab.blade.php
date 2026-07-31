@@ -13,7 +13,7 @@
       class="flex items-center gap-3 rounded-full border bg-surface px-4 py-3 text-sm font-medium shadow-lg transition-colors hover:border-accent hover:text-accent"
       data-cursor="hover"
     >
-      <span data-i18n="fab.email">Enviar email</span>
+      <span>{{ __('fab.email') }}</span>
       <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <rect x="2.5" y="5" width="19" height="14" rx="2.5" />
         <path d="m3 7 9 6 9-6" />
@@ -34,16 +34,7 @@
   </div>
 
   <!-- Botão principal -->
-  <button
-    type="button"
-    id="fab-toggle"
-    class="relative grid h-14 w-14 place-items-center rounded-full bg-accent text-accent-contrast shadow-[0_10px_40px_-8px_var(--accent-glow)] transition-transform duration-300 hover:scale-105"
-    aria-label="Abrir opções de contacto rápido"
-    data-i18n-attr="aria-label:fab.openAria"
-    aria-expanded="false"
-    aria-controls="fab-actions"
-    data-cursor="hover"
-  >
+  <button type="button" id="fab-toggle" class="relative grid h-14 w-14 place-items-center rounded-full bg-accent text-accent-contrast shadow-[0_10px_40px_-8px_var(--accent-glow)] transition-transform duration-300 hover:scale-105" aria-label="{{ __('fab.openAria') }}" aria-expanded="false" aria-controls="fab-actions" data-cursor="hover">
     <!-- Ícone de conversa -->
     <svg class="h-6 w-6" data-fab-open viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.3 9.3 0 0 1-2.8-.4L3 21l1.6-4.6A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z" />

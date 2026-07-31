@@ -15,16 +15,10 @@
       <div class="min-w-0">
         <p class="eyebrow reveal">
           <span class="h-px w-8 bg-accent" aria-hidden="true"></span>
-          <span data-i18n="contact.eyebrow">Contacto</span>
+          <span>{{ __('contact.eyebrow') }}</span>
         </p>
-        <h2 class="section-title reveal" style="--reveal-delay: 80ms" data-i18n="contact.title">
-          Vamos falar do seu projeto.
-        </h2>
-        <p class="section-lead reveal" style="--reveal-delay: 140ms" data-i18n="contact.lead">
-          Descreva-me o que precisa em poucas linhas. Respondo em menos de
-          24 horas úteis com uma opinião honesta, sem compromisso e sem
-          discurso de vendas.
-        </p>
+        <h2 class="section-title reveal" style="--reveal-delay: 80ms">{{ __('contact.title') }}</h2>
+        <p class="section-lead reveal" style="--reveal-delay: 140ms">{{ __('contact.lead') }}</p>
 
         <!-- Contactos diretos -->
         <ul class="mt-10 space-y-3">
@@ -76,8 +70,8 @@
                 </svg>
               </span>
               <span class="min-w-0">
-                <span class="block text-xs uppercase tracking-wider text-subtle" data-i18n="contact.baseLabel">Base</span>
-                <span class="block text-sm font-medium" data-i18n="contact.baseValue">Portugal · 100% remoto</span>
+                <span class="block text-xs uppercase tracking-wider text-subtle">{{ __('contact.baseLabel') }}</span>
+                <span class="block text-sm font-medium">{{ __('contact.baseValue') }}</span>
               </span>
             </div>
           </li>
@@ -85,7 +79,7 @@
 
         <!-- Redes sociais -->
         <div class="reveal mt-10" style="--reveal-delay: 220ms">
-          <p class="text-xs uppercase tracking-wider text-subtle" data-i18n="contact.social">Também aqui</p>
+          <p class="text-xs uppercase tracking-wider text-subtle">{{ __('contact.social') }}</p>
           <ul class="mt-4 flex gap-3">
             <li>
               <a
@@ -149,52 +143,44 @@
         >
           <div class="grid gap-5 sm:grid-cols-2">
             <div>
-              <label class="label" for="nome" data-i18n="form.name">Nome *</label>
-              <input class="field" type="text" id="nome" name="nome" required autocomplete="name" placeholder="Maria Silva" data-i18n-attr="placeholder:form.namePh" />
-              <p class="field-error" data-error-for="nome" data-i18n="form.nameError">Indique o seu nome.</p>
+              <label class="label" for="nome">{{ __('form.name') }}</label>
+              <input class="field" type="text" id="nome" name="nome" required autocomplete="name" placeholder="{{ __('form.namePh') }}" />
+              <p class="field-error" data-error-for="nome">{{ __('form.nameError') }}</p>
             </div>
             <div>
-              <label class="label" for="email" data-i18n="form.email">Email *</label>
-              <input class="field" type="email" id="email" name="email" required autocomplete="email" placeholder="maria@empresa.pt" data-i18n-attr="placeholder:form.emailPh" />
-              <p class="field-error" data-error-for="email" data-i18n="form.emailError">Indique um email válido.</p>
+              <label class="label" for="email">{{ __('form.email') }}</label>
+              <input class="field" type="email" id="email" name="email" required autocomplete="email" placeholder="{{ __('form.emailPh') }}" />
+              <p class="field-error" data-error-for="email">{{ __('form.emailError') }}</p>
             </div>
             <div>
-              <label class="label" for="empresa" data-i18n="form.company">Empresa</label>
-              <input class="field" type="text" id="empresa" name="empresa" autocomplete="organization" placeholder="Empresa, Lda." data-i18n-attr="placeholder:form.companyPh" />
+              <label class="label" for="empresa">{{ __('form.company') }}</label>
+              <input class="field" type="text" id="empresa" name="empresa" autocomplete="organization" placeholder="{{ __('form.companyPh') }}" />
             </div>
             <div>
-              <label class="label" for="tipo" data-i18n="form.type">Tipo de projeto</label>
+              <label class="label" for="tipo">{{ __('form.type') }}</label>
               <select class="field" id="tipo" name="tipo">
-                <option data-i18n="form.type1">Website institucional</option>
-                <option data-i18n="form.type2">Aplicação web</option>
-                <option data-i18n="form.type3">Loja online</option>
-                <option data-i18n="form.type4">Base de dados / integração</option>
-                <option data-i18n="form.type5">Manutenção de um projeto existente</option>
-                <option data-i18n="form.type6">Outro / não sei ainda</option>
+                <option>{{ __('form.type1') }}</option>
+                <option>{{ __('form.type2') }}</option>
+                <option>{{ __('form.type3') }}</option>
+                <option>{{ __('form.type4') }}</option>
+                <option>{{ __('form.type5') }}</option>
+                <option>{{ __('form.type6') }}</option>
               </select>
             </div>
             <div class="sm:col-span-2">
-              <label class="label" for="orcamento" data-i18n="form.budget">Orçamento aproximado</label>
+              <label class="label" for="orcamento">{{ __('form.budget') }}</label>
               <select class="field" id="orcamento" name="orcamento">
-                <option data-i18n="form.budget1">Até 500 €</option>
-                <option data-i18n="form.budget2">500 € a 1.500 €</option>
-                <option data-i18n="form.budget3">1.500 € a 3.000 €</option>
-                <option data-i18n="form.budget4">Mais de 3.000 €</option>
-                <option data-i18n="form.budget5">Preciso de ajuda a definir</option>
+                <option>{{ __('form.budget1') }}</option>
+                <option>{{ __('form.budget2') }}</option>
+                <option>{{ __('form.budget3') }}</option>
+                <option>{{ __('form.budget4') }}</option>
+                <option>{{ __('form.budget5') }}</option>
               </select>
             </div>
             <div class="sm:col-span-2">
-              <label class="label" for="mensagem" data-i18n="form.message">Mensagem *</label>
-              <textarea
-                class="field min-h-32 resize-y"
-                id="mensagem"
-                name="mensagem"
-                rows="5"
-                required
-                placeholder="O que precisa de resolver? Qual é o prazo ideal?"
-                data-i18n-attr="placeholder:form.messagePh"
-              ></textarea>
-              <p class="field-error" data-error-for="mensagem" data-i18n="form.messageError">Escreva pelo menos 10 caracteres.</p>
+              <label class="label" for="mensagem">{{ __('form.message') }}</label>
+              <textarea class="field min-h-32 resize-y" id="mensagem" name="mensagem" rows="5" required placeholder="{{ __('form.messagePh') }}"></textarea>
+              <p class="field-error" data-error-for="mensagem">{{ __('form.messageError') }}</p>
             </div>
           </div>
 
@@ -213,16 +199,12 @@
               required
               class="mt-0.5 h-4 w-4 shrink-0 rounded border-line-strong accent-[var(--accent)]"
             />
-            <label for="rgpd" class="text-xs leading-relaxed text-muted" data-i18n-html="form.rgpd">
-              Autorizo o tratamento dos meus dados para resposta a este
-              pedido, nos termos da
-              <a href="#" class="text-accent underline underline-offset-2">política de privacidade</a>. *
-            </label>
+            <label for="rgpd" class="text-xs leading-relaxed text-muted">{!! __('form.rgpd') !!}</label>
           </div>
-          <p class="field-error" data-error-for="rgpd" data-i18n="form.rgpdError">É necessário aceitar para enviar.</p>
+          <p class="field-error" data-error-for="rgpd">{{ __('form.rgpdError') }}</p>
 
           <button type="submit" class="btn btn-primary mt-7 w-full" data-cursor="hover">
-            <span data-submit-label data-i18n="form.submit">Enviar mensagem</span>
+            <span data-submit-label>{{ __('form.submit') }}</span>
             <!-- Spinner mostrado durante o envio -->
             <svg
               class="hidden h-4 w-4 animate-spin"
@@ -244,10 +226,7 @@
             aria-live="polite"
           ></p>
 
-          <p class="mt-4 text-center text-xs text-subtle" data-i18n-html="form.alt">
-            Ou escreva direto para
-            <a href="mailto:ola@alexandremagno.dev" class="text-accent underline underline-offset-2">ola@alexandremagno.dev</a>
-          </p>
+          <p class="mt-4 text-center text-xs text-subtle">{!! __('form.alt') !!}</p>
         </form>
       </div>
     </div>

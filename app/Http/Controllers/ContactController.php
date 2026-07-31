@@ -26,7 +26,8 @@ class ContactController extends Controller
             'budget' => $request->input('orcamento'),
             'body' => $request->string('mensagem')->trim()->toString(),
             'status' => 'new',
-            'locale' => $request->input('locale', 'pt'),
+            'locale' => $request->route('locale')
+                ?? $request->input('locale', 'pt'),
             'ip_address' => $request->ip(),
             'user_agent' => substr((string) $request->userAgent(), 0, 1000),
             'rgpd_consent_at' => now(),

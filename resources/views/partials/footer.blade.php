@@ -10,50 +10,47 @@
           <span class="grid h-9 w-9 place-items-center rounded-lg bg-accent font-display text-base font-bold text-accent-contrast">A</span>
           <span>Alexandre Magno<span class="text-accent">.</span></span>
         </a>
-        <p class="mt-5 max-w-xs text-sm leading-relaxed text-muted" data-i18n="footer.tagline">
-          Developer fullstack recém-formado. Construo sites e aplicações web
-          para pequenos negócios. Leves, seguros e fáceis de manter.
-        </p>
+        <p class="mt-5 max-w-xs text-sm leading-relaxed text-muted">{{ __('footer.tagline') }}</p>
         <p class="mt-6 flex items-center gap-2 text-sm text-muted">
           <span class="relative flex h-2 w-2" aria-hidden="true">
             <span class="absolute inline-flex h-full w-full rounded-full bg-accent animate-pulse-ring"></span>
             <span class="relative inline-flex h-2 w-2 rounded-full bg-accent"></span>
           </span>
-          <span data-i18n="footer.availability">Disponível para os primeiros projetos</span>
+          <span>{{ __('footer.availability') }}</span>
         </p>
       </div>
 
       <!-- Navegação -->
-      <nav aria-label="Secções do site" data-i18n-attr="aria-label:footer.navAria">
-        <h2 class="text-xs font-semibold uppercase tracking-wider text-subtle" data-i18n="footer.siteTitle">Site</h2>
+      <nav aria-label="{{ __('footer.navAria') }}">
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-subtle">{{ __('footer.siteTitle') }}</h2>
         <ul class="mt-5 space-y-3 text-sm">
-          <li><a href="#sobre" class="text-muted transition-colors hover:text-accent" data-i18n="nav.about">Sobre</a></li>
-          <li><a href="#servicos" class="text-muted transition-colors hover:text-accent" data-i18n="nav.services">Serviços</a></li>
-          <li><a href="#projetos" class="text-muted transition-colors hover:text-accent" data-i18n="nav.projects">Projetos</a></li>
-          <li><a href="#stack" class="text-muted transition-colors hover:text-accent" data-i18n="nav.stack">Stack</a></li>
-          <li><a href="#parceria" class="text-muted transition-colors hover:text-accent" data-i18n="nav.partnership">Parceria</a></li>
+          <li><a href="#sobre" class="text-muted transition-colors hover:text-accent">{{ __('nav.about') }}</a></li>
+          <li><a href="#servicos" class="text-muted transition-colors hover:text-accent">{{ __('nav.services') }}</a></li>
+          <li><a href="#projetos" class="text-muted transition-colors hover:text-accent">{{ __('nav.projects') }}</a></li>
+          <li><a href="#stack" class="text-muted transition-colors hover:text-accent">{{ __('nav.stack') }}</a></li>
+          <li><a href="#parceria" class="text-muted transition-colors hover:text-accent">{{ __('nav.partnership') }}</a></li>
         </ul>
       </nav>
 
       <!-- Serviços -->
-      <nav aria-label="Serviços" data-i18n-attr="aria-label:footer.servicesAria">
-        <h2 class="text-xs font-semibold uppercase tracking-wider text-subtle" data-i18n="footer.servicesTitle">Serviços</h2>
+      <nav aria-label="{{ __('footer.servicesAria') }}">
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-subtle">{{ __('footer.servicesTitle') }}</h2>
         <ul class="mt-5 space-y-3 text-sm">
-          <li><a href="#servicos" class="text-muted transition-colors hover:text-accent" data-i18n="footer.sv1">Websites</a></li>
-          <li><a href="#servicos" class="text-muted transition-colors hover:text-accent" data-i18n="footer.sv2">Aplicações web</a></li>
-          <li><a href="#servicos" class="text-muted transition-colors hover:text-accent" data-i18n="footer.sv3">Bases de dados</a></li>
-          <li><a href="#servicos" class="text-muted transition-colors hover:text-accent" data-i18n="footer.sv4">Lojas online</a></li>
-          <li><a href="#servicos" class="text-muted transition-colors hover:text-accent" data-i18n="footer.sv5">Manutenção</a></li>
+          <li><a href="#servicos" class="text-muted transition-colors hover:text-accent">{{ __('footer.sv1') }}</a></li>
+          <li><a href="#servicos" class="text-muted transition-colors hover:text-accent">{{ __('footer.sv2') }}</a></li>
+          <li><a href="#servicos" class="text-muted transition-colors hover:text-accent">{{ __('footer.sv3') }}</a></li>
+          <li><a href="#servicos" class="text-muted transition-colors hover:text-accent">{{ __('footer.sv4') }}</a></li>
+          <li><a href="#servicos" class="text-muted transition-colors hover:text-accent">{{ __('footer.sv5') }}</a></li>
         </ul>
       </nav>
 
       <!-- Contactos -->
       <div>
-        <h2 class="text-xs font-semibold uppercase tracking-wider text-subtle" data-i18n="footer.contactTitle">Contacto</h2>
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-subtle">{{ __('footer.contactTitle') }}</h2>
         <ul class="mt-5 space-y-3 text-sm">
           <li><a href="mailto:ola@alexandremagno.dev" class="text-muted transition-colors hover:text-accent">ola@alexandremagno.dev</a></li>
           <li><a href="tel:+351912345678" class="text-muted transition-colors hover:text-accent">+351 912 345 678</a></li>
-          <li class="text-muted" data-i18n="footer.location">Portugal · remoto</li>
+          <li class="text-muted">{{ __('footer.location') }}</li>
         </ul>
         <ul class="mt-6 flex gap-2">
           <li>
@@ -75,12 +72,12 @@
     <div class="flex flex-col gap-4 py-8 text-xs text-subtle sm:flex-row sm:items-center sm:justify-between">
       <p>
         © <span id="ano">2026</span>
-        <span data-i18n="footer.copyright">Alexandre Magno · NIF 000 000 000 · Todos os direitos reservados</span>
+        <span>{{ __('footer.copyright') }}</span>
       </p>
       <ul class="flex flex-wrap gap-x-6 gap-y-2">
-        <li><a href="#" class="transition-colors hover:text-accent" data-i18n="footer.privacy">Política de privacidade</a></li>
-        <li><a href="#" class="transition-colors hover:text-accent" data-i18n="footer.terms">Termos</a></li>
-        <li><a href="https://www.livroreclamacoes.pt/" target="_blank" rel="noopener" class="transition-colors hover:text-accent" data-i18n="footer.complaints">Livro de reclamações</a></li>
+        <li><a href="#" class="transition-colors hover:text-accent">{{ __('footer.privacy') }}</a></li>
+        <li><a href="#" class="transition-colors hover:text-accent">{{ __('footer.terms') }}</a></li>
+        <li><a href="https://www.livroreclamacoes.pt/" target="_blank" rel="noopener" class="transition-colors hover:text-accent">{{ __('footer.complaints') }}</a></li>
       </ul>
     </div>
   </div>

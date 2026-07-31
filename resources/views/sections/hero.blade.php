@@ -29,32 +29,14 @@
           <span class="absolute inline-flex h-full w-full rounded-full bg-accent animate-pulse-ring"></span>
           <span class="relative inline-flex h-2 w-2 rounded-full bg-accent"></span>
         </span>
-        <span data-i18n="hero.badge">Disponível para os primeiros projetos</span>
+        <span>{{ __('hero.badge') }}</span>
       </p>
 
       <!-- Headline: cada palavra entra de baixo com máscara.
            O atributo data-split diz ao JS para dividir em palavras. -->
-      <h1
-        class="mt-7 text-display-lg font-semibold"
-        data-split
-        data-split-delay="70"
-        data-i18n-html="hero.title"
-      >
-        Software moderno que
-        <span class="text-gradient">trabalha</span>
-        para o seu negócio.
-      </h1>
+      <h1 class="mt-7 text-display-lg font-semibold" data-split data-split-delay="70">{!! __('hero.title') !!}</h1>
 
-      <p
-        class="section-lead hero-fade text-lg sm:text-xl"
-        style="--reveal-delay: 700ms"
-        data-i18n="hero.lead"
-      >
-        Sou o Alexandre, developer fullstack. Acabei de concluir uma
-        formação intensiva em desenvolvimento web e estou a construir a
-        minha carteira de clientes. Isso quer dizer tecnologia atual,
-        atenção total ao seu projeto e preços de quem está a começar.
-      </p>
+      <p class="section-lead hero-fade text-lg sm:text-xl" style="--reveal-delay: 700ms">{{ __('hero.lead') }}</p>
 
       <!-- CTAs -->
       <div
@@ -62,14 +44,12 @@
         style="--reveal-delay: 820ms"
       >
         <a href="#contacto" class="btn btn-primary group" data-cursor="hover">
-          <span data-i18n="hero.cta1">Falar sobre o meu projeto</span>
+          <span>{{ __('hero.cta1') }}</span>
           <svg class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M5 12h14M13 6l6 6-6 6" />
           </svg>
         </a>
-        <a href="#projetos" class="btn btn-ghost" data-cursor="hover" data-i18n="hero.cta2">
-          Ver projetos
-        </a>
+        <a href="#projetos" class="btn btn-ghost" data-cursor="hover">{{ __('hero.cta2') }}</a>
       </div>
 
       <!-- Factos verificáveis: formação concluída e forma de trabalhar.
@@ -79,38 +59,33 @@
         style="--reveal-delay: 940ms"
       >
         <div>
-          <dt class="text-xs uppercase tracking-wider text-subtle" data-i18n="hero.stat1.label">Formação</dt>
+          <dt class="text-xs uppercase tracking-wider text-subtle">{{ __('hero.stat1.label') }}</dt>
           <dd class="mt-1 font-display text-3xl font-semibold">
             <span data-count-to="7">7</span>
-            <span data-i18n="hero.stat1.unit">meses</span>
+            <span>{{ __('hero.stat1.unit') }}</span>
           </dd>
         </div>
         <div>
-          <dt class="text-xs uppercase tracking-wider text-subtle" data-i18n="hero.stat2.label">Aulas/semana</dt>
+          <dt class="text-xs uppercase tracking-wider text-subtle">{{ __('hero.stat2.label') }}</dt>
           <dd class="mt-1 font-display text-3xl font-semibold">
             <span data-count-to="5">5</span>
           </dd>
         </div>
         <div>
-          <dt class="text-xs uppercase tracking-wider text-subtle" data-i18n="hero.stat3.label">Resposta</dt>
-          <dd class="mt-1 font-display text-3xl font-semibold" data-i18n="hero.stat3.value">&lt; 24h</dd>
+          <dt class="text-xs uppercase tracking-wider text-subtle">{{ __('hero.stat3.label') }}</dt>
+          <dd class="mt-1 font-display text-3xl font-semibold">{{ __('hero.stat3.value') }}</dd>
         </div>
         <div>
-          <dt class="text-xs uppercase tracking-wider text-subtle" data-i18n="hero.stat4.label">Em paralelo</dt>
-          <dd class="mt-1 font-display text-3xl font-semibold" data-i18n="hero.stat4.value">Máx. 2</dd>
+          <dt class="text-xs uppercase tracking-wider text-subtle">{{ __('hero.stat4.label') }}</dt>
+          <dd class="mt-1 font-display text-3xl font-semibold">{{ __('hero.stat4.value') }}</dd>
         </div>
       </dl>
     </div>
   </div>
 
   <!-- Indicador de scroll -->
-  <a
-    href="#sobre"
-    class="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-subtle transition-colors hover:text-accent lg:flex"
-    aria-label="Descer para a secção Sobre"
-    data-i18n-attr="aria-label:hero.scrollAria"
-  >
-    <span data-i18n="hero.scroll">Scroll</span>
+  <a href="#sobre" class="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-subtle transition-colors hover:text-accent lg:flex" aria-label="{{ __('hero.scrollAria') }}">
+    <span>{{ __('hero.scroll') }}</span>
     <span class="h-10 w-px bg-gradient-to-b from-accent to-transparent"></span>
   </a>
 </section>

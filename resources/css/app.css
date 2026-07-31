@@ -433,7 +433,7 @@
 
   .lang-option {
     @apply flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left
-           text-sm text-muted transition-colors duration-200;
+           text-sm text-muted no-underline transition-colors duration-200;
   }
   .lang-option:hover {
     background-color: var(--surface-hover);

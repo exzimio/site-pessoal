@@ -357,7 +357,6 @@
       });
     };
     labelDots();
-    document.addEventListener("i18n:change", labelDots);
 
     const syncUI = () => {
       dots.forEach((dot, i) =>
@@ -707,7 +706,7 @@
           credentials: "same-origin",
           body: JSON.stringify({
             ...data,
-            locale: window.I18N?.lang || "pt",
+            locale: (window.I18N && window.I18N.lang) || "pt",
           }),
         });
 
@@ -752,17 +751,6 @@
   }
 
   /* =========================================================================
-     15. TROCA DE IDIOMA
-     O i18n.js substitui o texto; aqui volta-se a preparar o que o JS já tinha
-     transformado, ou seja o título do hero dividido em palavras.
-     ========================================================================= */
-  function initLanguageSync() {
-    document.addEventListener("i18n:change", () => {
-      $$("[data-split]").forEach(splitWords);
-    });
-  }
-
-  /* =========================================================================
      ARRANQUE
      ========================================================================= */
   function init() {
@@ -780,7 +768,6 @@
     initFab();
     initContactForm();
     initYear();
-    initLanguageSync();
   }
 
   if (document.readyState === "loading") {
