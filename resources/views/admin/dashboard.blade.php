@@ -6,24 +6,27 @@
   <div class="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
     <div>
       <h1 class="font-display text-2xl font-semibold">Painel</h1>
-      <p class="mt-1 text-sm text-muted">Resumo das mensagens que chegaram pelo site.</p>
+      <p class="mt-1 text-sm text-muted">Resumo do conteúdo e das mensagens.</p>
     </div>
-    <a href="{{ route('admin.messages.index') }}" class="btn btn-ghost text-sm">Ver todas</a>
+    <a href="{{ route('admin.messages.index') }}" class="btn btn-ghost text-sm">Ver mensagens</a>
   </div>
 
   <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
     @foreach ([
-      'new' => 'Novas',
-      'read' => 'Lidas',
-      'replied' => 'Respondidas',
-      'total' => 'Total',
-    ] as $key => $label)
-      <div class="card p-5">
-        <p class="text-xs uppercase tracking-wider text-subtle">{{ $label }}</p>
-        <p class="mt-2 font-display text-3xl font-semibold {{ $key === 'new' && $counts['new'] > 0 ? 'text-accent' : '' }}">
+      'services' => ['label' => 'Serviços', 'route' => 'admin.services.index'],
+      'projects' => ['label' => 'Projetos', 'route' => 'admin.projects.index'],
+      'commitments' => ['label' => 'Compromissos', 'route' => 'admin.commitments.index'],
+      'messages' => ['label' => 'Mensagens', 'route' => 'admin.messages.index'],
+    ] as $key => $item)
+      <a href="{{ route($item['route']) }}" class="card block p-5 transition-colors hover:border-accent/40">
+        <p class="text-xs uppercase tracking-wider text-subtle">{{ $item['label'] }}</p>
+        <p class="mt-2 font-display text-3xl font-semibold {{ $key === 'messages' && $counts['new'] > 0 ? 'text-accent' : '' }}">
           {{ $counts[$key] }}
         </p>
-      </div>
+        @if ($key === 'messages' && $counts['new'] > 0)
+          <p class="mt-1 text-xs text-accent">{{ $counts['new'] }} novas</p>
+        @endif
+      </a>
     @endforeach
   </div>
 

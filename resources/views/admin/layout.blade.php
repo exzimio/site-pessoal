@@ -17,10 +17,14 @@
               <span class="grid h-8 w-8 place-items-center rounded-lg bg-accent font-display text-sm font-bold text-accent-contrast">A</span>
               <span>Backoffice</span>
             </a>
-            <nav class="hidden items-center gap-4 text-sm sm:flex">
+            <nav class="hidden items-center gap-4 text-sm lg:flex">
               <a href="{{ route('admin.dashboard') }}" class="text-muted transition-colors hover:text-fg {{ request()->routeIs('admin.dashboard') ? 'text-fg' : '' }}">Painel</a>
+              <a href="{{ route('admin.services.index') }}" class="text-muted transition-colors hover:text-fg {{ request()->routeIs('admin.services.*') ? 'text-fg' : '' }}">Serviços</a>
+              <a href="{{ route('admin.projects.index') }}" class="text-muted transition-colors hover:text-fg {{ request()->routeIs('admin.projects.*') ? 'text-fg' : '' }}">Projetos</a>
+              <a href="{{ route('admin.commitments.index') }}" class="text-muted transition-colors hover:text-fg {{ request()->routeIs('admin.commitments.*') ? 'text-fg' : '' }}">Compromissos</a>
+              <a href="{{ route('admin.technologies.index') }}" class="text-muted transition-colors hover:text-fg {{ request()->routeIs('admin.technologies.*') ? 'text-fg' : '' }}">Tecnologias</a>
               <a href="{{ route('admin.messages.index') }}" class="text-muted transition-colors hover:text-fg {{ request()->routeIs('admin.messages.*') ? 'text-fg' : '' }}">Mensagens</a>
-              <a href="{{ route('home') }}" class="text-muted transition-colors hover:text-fg" target="_blank" rel="noopener">Ver site</a>
+              <a href="{{ route('home', ['locale' => 'pt']) }}" class="text-muted transition-colors hover:text-fg" target="_blank" rel="noopener">Ver site</a>
             </nav>
           </div>
           <form method="POST" action="{{ route('admin.logout') }}">
