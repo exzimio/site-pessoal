@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\SyncsTranslations;
 use App\Http\Controllers\Controller;
 use App\Models\Commitment;
 use Illuminate\Http\RedirectResponse;
@@ -10,7 +11,7 @@ use Illuminate\View\View;
 
 class CommitmentController extends Controller
 {
-    private const LOCALES = ['pt', 'en', 'es'];
+    use SyncsTranslations;
 
     public function index(): View
     {
@@ -82,25 +83,13 @@ class CommitmentController extends Controller
         $validated = $request->validate([
             'sort_order' => ['required', 'integer', 'min:0', 'max:65535'],
             'is_active' => ['nullable', 'boolean'],
-            'translations' => ['required', 'array'],
-            'translations.pt.label' => ['required', 'string', 'max:120'],
-            'translations.pt.title' => ['required', 'string', 'max:255'],
-            'translations.pt.subtitle' => ['required', 'string', 'max:255'],
-            'translations.pt.body' => ['required', 'string'],
-            'translations.en.label' => ['required', 'string', 'max:120'],
-            'translations.en.title' => ['required', 'string', 'max:255'],
-            'translations.en.subtitle' => ['required', 'string', 'max:255'],
-            'translations.en.body' => ['required', 'string'],
-            'translations.es.label' => ['required', 'string', 'max:120'],
-            'translations.es.title' => ['required', 'string', 'max:255'],
-            'translations.es.subtitle' => ['required', 'string', 'max:255'],
-            'translations.es.body' => ['required', 'string'],
+            ...$this->localeRules([
+                'label' => ['required', 'string', 'max:120'],
+                'title' => ['required', 'string', 'max:255'],
+                'subtitle' => ['required', 'string', 'max:255'],
+                'body' => ['required', 'string'],
+            ]),
         ]);
-
-        $attrs = [
-            'sort_order' => (int) $validated['sort_order'],
-            'is_active' => $request->boolean('is_active'),
-        ];
 
         $translations = [];
         foreach (self::LOCALES as $locale) {
@@ -113,16 +102,12 @@ class CommitmentController extends Controller
             ];
         }
 
-        return compact('attrs', 'translations');
-    }
-
-    private function syncTranslations(Commitment $commitment, array $translations): void
-    {
-        foreach ($translations as $locale => $fields) {
-            $commitment->translations()->updateOrCreate(
-                ['locale' => $locale],
-                $fields
-            );
-        }
+        return [
+            'attrs' => [
+                'sort_order' => (int) $validated['sort_order'],
+                'is_active' => $request->boolean('is_active'),
+            ],
+            'translations' => $translations,
+        ];
     }
 }

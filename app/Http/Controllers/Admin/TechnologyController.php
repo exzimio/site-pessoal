@@ -14,7 +14,7 @@ class TechnologyController extends Controller
 {
     private const ICONS = [
         'html5', 'css3', 'javascript', 'php', 'python', 'mysql',
-        'api', 'json', 'ajax', 'git', 'tailwind', 'terminal',
+        'api', 'json', 'ajax', 'git', 'tailwind', 'bootstrap', 'terminal',
     ];
 
     public function index(): View

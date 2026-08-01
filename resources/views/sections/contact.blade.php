@@ -1,6 +1,3 @@
-<!-- ==================================================================
-     7. CONTACTO
-     ================================================================== -->
 <section id="contacto" class="section relative overflow-hidden bg-bg-soft">
   <!-- Halo de acento no canto -->
   <div
@@ -11,7 +8,7 @@
 
   <div class="container-x relative">
     <div class="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-      <!-- Coluna de informação -->
+      <!-- Coluna de informaÃ§Ã£o -->
       <div class="min-w-0">
         <p class="eyebrow reveal">
           <span class="h-px w-8 bg-accent" aria-hidden="true"></span>
@@ -127,11 +124,11 @@
         </div>
       </div>
 
-      <!-- Formulário -->
+      <!-- FormulÃ¡rio -->
       <div class="reveal reveal-right min-w-0" style="--reveal-delay: 100ms">
         <!--
-          FORMULÁRIO
-          O formulário posta para a rota Laravel /contacto. Se o pedido
+          FORMULÃRIO
+          O formulÃ¡rio posta para a rota Laravel /contacto. Se o pedido
           falhar, o JS mostra o email de contacto como alternativa.
         -->
         <form
@@ -184,7 +181,7 @@
             </div>
           </div>
 
-          <!-- Honeypot anti-spam: invisível para humanos, tentador para bots -->
+          <!-- Honeypot anti-spam: invisÃ­vel para humanos, tentador para bots -->
           <div class="absolute -left-[9999px]" aria-hidden="true">
             <label for="website">Website</label>
             <input type="text" id="website" name="_gotcha" tabindex="-1" autocomplete="off" />
@@ -218,7 +215,7 @@
             </svg>
           </button>
 
-          <!-- Região viva: leitores de ecrã anunciam o resultado -->
+          <!-- RegiÃ£o viva: leitores de ecrÃ£ anunciam o resultado -->
           <p
             id="form-status"
             class="mt-4 hidden text-sm"

@@ -5,10 +5,6 @@ namespace App\Models\Concerns;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/**
- * Relação de traduções por locale.
- * Espera que o modelo defina translationModel() e a foreign key padrão.
- */
 trait HasLocaleTranslations
 {
     abstract public function translations(): HasMany;

@@ -1,6 +1,3 @@
-<!-- ==================================================================
-     5. STACK TECNOLÓGICO
-     ================================================================== -->
 <section id="stack" class="section bg-bg-soft">
   <div class="container-x">
     <header class="max-w-3xl">

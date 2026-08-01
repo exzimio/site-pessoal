@@ -1,9 +1,5 @@
-<!-- ====================================================================
-     BOTÃO FLUTUANTE DE CONTACTO
-     Fechado por omissão; abre em WhatsApp + email.
-     ==================================================================== -->
 <div class="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-3 sm:bottom-7 sm:right-7">
-  <!-- Ações (escondidas até abrir) -->
+  <!-- AÃ§Ãµes (escondidas atÃ© abrir) -->
   <div
     id="fab-actions"
     class="pointer-events-none flex translate-y-2 flex-col items-end gap-3 opacity-0 transition-all duration-300"
@@ -33,13 +29,13 @@
     </a>
   </div>
 
-  <!-- Botão principal -->
+  <!-- BotÃ£o principal -->
   <button type="button" id="fab-toggle" class="relative grid h-14 w-14 place-items-center rounded-full bg-accent text-accent-contrast shadow-[0_10px_40px_-8px_var(--accent-glow)] transition-transform duration-300 hover:scale-105" aria-label="{{ __('fab.openAria') }}" aria-expanded="false" aria-controls="fab-actions" data-cursor="hover">
-    <!-- Ícone de conversa -->
+    <!-- Ãcone de conversa -->
     <svg class="h-6 w-6" data-fab-open viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.3 9.3 0 0 1-2.8-.4L3 21l1.6-4.6A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z" />
     </svg>
-    <!-- Ícone de fechar -->
+    <!-- Ãcone de fechar -->
     <svg class="absolute hidden h-6 w-6" data-fab-close viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
       <path d="M6 6l12 12M18 6 6 18" />
     </svg>

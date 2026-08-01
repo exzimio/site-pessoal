@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\SyncsTranslations;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Technology;
@@ -13,7 +14,7 @@ use Illuminate\View\View;
 
 class ProjectController extends Controller
 {
-    private const LOCALES = ['pt', 'en', 'es'];
+    use SyncsTranslations;
 
     public function index(): View
     {
@@ -28,7 +29,11 @@ class ProjectController extends Controller
 
     public function create(): View
     {
-        $project = new Project(['status' => 'published', 'sort_order' => 0, 'year' => (int) date('Y')]);
+        $project = new Project([
+            'status' => 'published',
+            'sort_order' => 0,
+            'year' => (int) date('Y'),
+        ]);
         $project->setRelation('translations', collect());
 
         return view('admin.projects.create', [
@@ -108,32 +113,14 @@ class ProjectController extends Controller
             'technology_ids.*' => ['integer', 'exists:technologies,id'],
             'sort_orders' => ['nullable', 'array'],
             'sort_orders.*' => ['nullable', 'integer', 'min:0', 'max:65535'],
-            'translations' => ['required', 'array'],
-            'translations.pt.badge' => ['required', 'string', 'max:120'],
-            'translations.pt.title' => ['required', 'string', 'max:255'],
-            'translations.pt.subtitle' => ['required', 'string', 'max:255'],
-            'translations.pt.description' => ['required', 'string'],
-            'translations.pt.media_alt' => ['nullable', 'string', 'max:255'],
-            'translations.en.badge' => ['required', 'string', 'max:120'],
-            'translations.en.title' => ['required', 'string', 'max:255'],
-            'translations.en.subtitle' => ['required', 'string', 'max:255'],
-            'translations.en.description' => ['required', 'string'],
-            'translations.en.media_alt' => ['nullable', 'string', 'max:255'],
-            'translations.es.badge' => ['required', 'string', 'max:120'],
-            'translations.es.title' => ['required', 'string', 'max:255'],
-            'translations.es.subtitle' => ['required', 'string', 'max:255'],
-            'translations.es.description' => ['required', 'string'],
-            'translations.es.media_alt' => ['nullable', 'string', 'max:255'],
+            ...$this->localeRules([
+                'badge' => ['required', 'string', 'max:120'],
+                'title' => ['required', 'string', 'max:255'],
+                'subtitle' => ['required', 'string', 'max:255'],
+                'description' => ['required', 'string'],
+                'media_alt' => ['nullable', 'string', 'max:255'],
+            ]),
         ]);
-
-        $attrs = [
-            'slug' => Str::slug($validated['slug']),
-            'category' => $validated['category'],
-            'media_key' => $validated['media_key'],
-            'year' => (int) $validated['year'],
-            'sort_order' => (int) $validated['sort_order'],
-            'status' => $validated['status'],
-        ];
 
         $translations = [];
         foreach (self::LOCALES as $locale) {
@@ -154,16 +141,17 @@ class ProjectController extends Controller
             ];
         }
 
-        return compact('attrs', 'translations', 'technologies');
-    }
-
-    private function syncTranslations(Project $project, array $translations): void
-    {
-        foreach ($translations as $locale => $fields) {
-            $project->translations()->updateOrCreate(
-                ['locale' => $locale],
-                $fields
-            );
-        }
+        return [
+            'attrs' => [
+                'slug' => Str::slug($validated['slug']),
+                'category' => $validated['category'],
+                'media_key' => $validated['media_key'],
+                'year' => (int) $validated['year'],
+                'sort_order' => (int) $validated['sort_order'],
+                'status' => $validated['status'],
+            ],
+            'translations' => $translations,
+            'technologies' => $technologies,
+        ];
     }
 }

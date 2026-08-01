@@ -1,6 +1,3 @@
-<!-- ====================================================================
-     8. FOOTER
-     ==================================================================== -->
 <footer class="border-t bg-bg">
   <div class="container-x">
     <div class="grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr]">
@@ -20,7 +17,7 @@
         </p>
       </div>
 
-      <!-- Navegação -->
+      <!-- NavegaÃ§Ã£o -->
       <nav aria-label="{{ __('footer.navAria') }}">
         <h2 class="text-xs font-semibold uppercase tracking-wider text-subtle">{{ __('footer.siteTitle') }}</h2>
         <ul class="mt-5 space-y-3 text-sm">
@@ -32,7 +29,7 @@
         </ul>
       </nav>
 
-      <!-- Serviços -->
+      <!-- ServiÃ§os -->
       <nav aria-label="{{ __('footer.servicesAria') }}">
         <h2 class="text-xs font-semibold uppercase tracking-wider text-subtle">{{ __('footer.servicesTitle') }}</h2>
         <ul class="mt-5 space-y-3 text-sm">
@@ -71,7 +68,7 @@
 
     <div class="flex flex-col gap-4 py-8 text-xs text-subtle sm:flex-row sm:items-center sm:justify-between">
       <p>
-        © <span id="ano">2026</span>
+        Â© <span id="ano">2026</span>
         <span>{{ __('footer.copyright') }}</span>
       </p>
       <ul class="flex flex-wrap gap-x-6 gap-y-2">

@@ -1,6 +1,3 @@
-<!-- ==================================================================
-     2. SOBRE
-     ================================================================== -->
 <section id="sobre" class="section">
   <div class="container-x">
     <div class="grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
@@ -41,9 +38,9 @@
         </ol>
       </div>
 
-      <!-- Coluna visual: cartão de código + princípios.
-           `min-w-0` impede que o <pre> (conteúdo largo) estique a coluna
-           da grelha e crie scroll horizontal em ecrãs pequenos. -->
+      <!-- Coluna visual: cartÃ£o de cÃ³digo + princÃ­pios.
+           `min-w-0` impede que o <pre> (conteÃºdo largo) estique a coluna
+           da grelha e crie scroll horizontal em ecrÃ£s pequenos. -->
       <div class="reveal reveal-right min-w-0 lg:sticky lg:top-28 lg:self-start" style="--reveal-delay: 120ms">
         <!-- Janela de terminal decorativa -->
         <div class="card card-glow p-0" data-glow>
@@ -63,7 +60,7 @@
 ];</code></pre>
         </div>
 
-        <!-- Princípios -->
+        <!-- PrincÃ­pios -->
         <ul class="mt-6 grid gap-4 sm:grid-cols-2">
           <li class="card card-glow p-5" data-glow>
             <h3 class="text-base">{{ __('about.pr1.title') }}</h3>

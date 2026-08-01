@@ -1,13 +1,30 @@
 # alexandremagno.dev
 
-Site pessoal de developer fullstack, em Laravel. Começou como um site
-estático em HTML, Tailwind e JavaScript nativo e está a ser passado para uma
-aplicação com base de dados e backoffice, para eu poder alterar projetos,
-serviços e textos sem tocar em código.
+[Português](README.md) · [English](README.en.md) · [Español](README.es.md)
 
-O design, as animações e o sistema de idiomas vieram do site estático e não
-mudaram. A migração é feita por fases e o site tem de ficar a funcionar no
-fim de cada uma.
+Site pessoal de developer fullstack, em Laravel. Começou como um site
+estático em HTML, Tailwind e JavaScript nativo. Passei-o para uma aplicação
+com base de dados e backoffice, para poder alterar projetos, serviços e
+textos sem mexer no código a cada mudança.
+
+O visual e as animações vieram do site estático. A migração foi feita por
+fases, com o site a funcionar no fim de cada uma.
+
+## O que aprendi neste projeto
+
+- Um site de portfolio não precisa de meter tudo na base de dados. O que
+  mudo com frequência (projetos, serviços, mensagens) vai para MySQL. O
+  resto da interface fica em `lang/*.json`.
+- Idioma na URL (`/pt`, `/en`, `/es`) é mais limpo do que trocar texto só
+  no browser. O Google vê três versões e um link partilhado chega certo.
+- Auth à mão chega para um único admin. Breeze seria peso a mais aqui.
+- Preços em cêntimos evitam surpresas com floats. Formato em euros só na
+  vista.
+- Mockups dos projetos são partials Blade com uma chave (`dashboard`,
+  `shop`…). Ainda não há upload de imagens. Prefiro isso a fingir
+  screenshots de clientes que não existem.
+- Migrar por fases obriga a não partir o site a meio. Cada commit tinha
+  de deixar algo utilizável.
 
 ## Estado
 
@@ -17,7 +34,7 @@ Fase 2 feita: MySQL, formulário de contacto a gravar mensagens, login e
 caixa de entrada em `/admin`.
 
 Fase 3 feita: serviços, projetos, compromissos e stack vêm da base de
-dados; idiomas em URL (`/pt`, `/en`, `/es`); CRUD no backoffice.
+dados; idiomas em URL; CRUD no backoffice.
 
 Por fazer: uploads de imagens, cache, testes e publicação.
 
@@ -80,20 +97,20 @@ consola. Aí não é preciso o `npm run build`.
 
 ## Idiomas
 
-Cada língua tem URL próprio. O middleware `SetLocale` define o locale da
-aplicação a partir do segmento `{locale}`.
+Cada língua tem URL próprio. O middleware `SetLocale` define o locale a
+partir do segmento `{locale}`.
 
-- Interface (navegação, botões, hero, formulário, etc.): ficheiros
-  `lang/pt.json`, `lang/en.json`, `lang/es.json`
+- Interface (navegação, botões, hero, formulário): `lang/pt.json`,
+  `lang/en.json`, `lang/es.json`
 - Conteúdo editável (serviços, projetos, compromissos): tabelas de
   tradução na base de dados, uma linha por locale
 
-O seletor do header mantém o aspeto antigo, mas cada opção é um link para
-a mesma página noutro idioma. Há `hreflang` e `canonical` por versão.
+O seletor do header liga para a mesma página noutro idioma. Há `hreflang`
+e `canonical` por versão.
 
 ## Backoffice
 
-Área autenticada em `/admin`. Só existe um utilizador, o que está no seeder.
+Área autenticada em `/admin`. Só existe um utilizador, criado no seeder.
 
 - Painel com contagens
 - Mensagens: lista, pesquisa, estados, export CSV
@@ -111,7 +128,7 @@ app/Http/Controllers/
   ContactController.php         grava a mensagem do formulário
   LocaleRedirectController.php  / → /pt|/en|/es
   Admin/                        login, painel, mensagens e CRUDs
-app/Models/                     Message, Service, Project, Commitment, Technology…
+app/Models/                     Message, Service, Project, Commitment…
 lang/                           pt.json, en.json, es.json
 resources/views/
   components/layout.blade.php
@@ -121,30 +138,24 @@ resources/views/
   partials/project-media/       ilustrações SVG dos projetos
 ```
 
-## Decisões
+## Decisões técnicas
 
-**Conteúdo na BD, rótulos em ficheiros de idioma.** O que mudas no
-backoffice (títulos de projetos, preços, compromissos) vive em tabelas.
-O que é estrutura da página (navegação, botões, mensagens de erro) vive
+**Conteúdo na BD, rótulos em ficheiros.** O que mudas no backoffice vive
+em tabelas. A estrutura da página (navegação, erros do formulário) vive
 em `lang/*.json`. Misturar as duas coisas numa só tabela torna o layout
 difícil de manter.
 
-**Traduções em tabelas próprias, não colunas `titulo_pt`.** Cada locale
-é uma linha. Acrescentar um idioma novo não exige alterar o esquema.
+**Traduções em tabelas próprias.** Cada locale é uma linha. Acrescentar
+um idioma novo não obriga a alterar o esquema com colunas `titulo_pt`.
 
-**Preços em cêntimos.** `price_cents` evita floats. A vista formata para
-euros.
+**Preços em cêntimos.** `price_cents` na base; euros só na apresentação.
 
-**Ícones e mockups em partials Blade, não na BD.** O backoffice escolhe
-uma chave (`monitor`, `dashboard`…). O SVG continua no código, versionado
-com o resto do site.
+**Ícones e mockups no código.** O admin escolhe uma chave. O SVG fica
+versionado com o resto do site.
 
-**Idioma na URL, não só em JavaScript.** Assim o Google indexa as três
-versões e um link partilhado chega no idioma certo.
+**Idioma na URL.** Indexação clara e links partilháveis no idioma certo.
 
-**Sem papéis nem registo de atividade.** Só há um utilizador.
-
-**Auth à mão, sem Breeze.** Login, logout e middleware `auth` bastam.
+**Um só utilizador, sem papéis.** Auth simples, sem Breeze.
 
 ## Fases
 

@@ -1,50 +1,25 @@
-/* ==========================================================================
-   app.css — fonte única de estilos (Tailwind CSS v4)
-   Compilado pelo Vite: npm run dev em desenvolvimento, npm run build para publicar.
-   --------------------------------------------------------------------------
-   Organização:
-   1. Import do Tailwind + variantes
-   2. Design tokens (paleta dark = padrão, light = override)
-   3. Mapeamento dos tokens para utilitários Tailwind (@theme)
-   4. Base: reset fino, tipografia, scrollbar, acessibilidade
-   5. Componentes: botões, cards, badges, secções, carrossel
-   6. Animações de scroll e utilitários próprios
-   ========================================================================== */
-
 @import "tailwindcss";
 
-/* Variante `light:` — o tema padrão é dark, o light é opt-in via
-   `data-theme="light"` no <html>. Permite escrever `light:opacity-70`. */
 @custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
 
-/* --------------------------------------------------------------------------
-   2. DESIGN TOKENS
-   Um único ponto de verdade para cores. Trocar de tema = trocar variáveis,
-   sem duplicar utilitários no HTML.
-   -------------------------------------------------------------------------- */
 :root {
-  /* Superfícies */
   --bg: #0a0a0b;
   --bg-soft: #0d0e11;
   --surface: #101216;
   --surface-hover: #16181e;
 
-  /* Traços */
   --border: rgb(255 255 255 / 0.08);
   --border-strong: rgb(255 255 255 / 0.16);
 
-  /* Texto */
   --fg: #f4f4f5;
   --fg-muted: #a1a1aa;
   --fg-subtle: #71717a;
 
-  /* Acentos — usados com moderação (CTAs, links, detalhes) */
   --accent: #00e59a;
-  --accent-contrast: #04120d; /* texto sobre fundo de acento */
+  --accent-contrast: #04120d;
   --accent-2: #7c5cff;
   --accent-glow: rgb(0 229 154 / 0.35);
 
-  /* Sombras compostas para profundidade em fundo escuro */
   --shadow-card: 0 1px 0 0 rgb(255 255 255 / 0.04) inset,
     0 20px 40px -24px rgb(0 0 0 / 0.8);
   --shadow-glow: 0 0 0 1px rgb(0 229 154 / 0.22),
@@ -66,7 +41,7 @@
   --fg-muted: #52525b;
   --fg-subtle: #71717a;
 
-  /* Verde escurecido para manter contraste AA sobre branco */
+  
   --accent: #00875a;
   --accent-contrast: #ffffff;
   --accent-2: #5b3df5;
@@ -80,11 +55,6 @@
   color-scheme: light;
 }
 
-/* --------------------------------------------------------------------------
-   3. TOKENS -> TAILWIND
-   `inline` faz os utilitários apontarem para a variável (e não copiarem o
-   valor), o que é o que permite a troca de tema em runtime.
-   -------------------------------------------------------------------------- */
 @theme inline {
   --color-bg: var(--bg);
   --color-bg-soft: var(--bg-soft);
@@ -110,7 +80,7 @@
     sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
 
-  /* Escala tipográfica de display, fluida (clamp) para responsividade real */
+  
   --text-display-sm: clamp(1.75rem, 1.2rem + 2.2vw, 2.5rem);
   --text-display: clamp(2.25rem, 1.4rem + 3.4vw, 3.75rem);
   --text-display-lg: clamp(2.75rem, 1rem + 7vw, 5.5rem);
@@ -166,9 +136,6 @@
   }
 }
 
-/* --------------------------------------------------------------------------
-   4. BASE
-   -------------------------------------------------------------------------- */
 @layer base {
   * {
     border-color: var(--border);
@@ -176,12 +143,10 @@
 
   html {
     scroll-behavior: smooth;
-    /* Compensa o header fixo quando se navega por âncoras */
+    
     scroll-padding-top: 6rem;
     -webkit-tap-highlight-color: transparent;
-    /* `clip` (em vez de `hidden`) corta transbordos horizontais de halos e
-       animações sem transformar a raiz num contentor de scroll — o que
-       manteria `position: sticky` a funcionar. */
+    
     overflow-x: clip;
   }
 
@@ -215,14 +180,14 @@
     color: var(--accent-contrast);
   }
 
-  /* Foco visível e consistente para navegação por teclado */
+  
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
     border-radius: 4px;
   }
 
-  /* Scrollbar discreta, alinhada ao tema */
+  
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -239,14 +204,14 @@
     background: var(--fg-subtle);
   }
 
-  /* As imagens do portfólio nunca devem "empurrar" o layout */
+  
   img,
   svg {
     display: block;
     max-width: 100%;
   }
 
-  /* Respeitar preferência do sistema: sem movimento, sem animações */
+  
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -261,11 +226,8 @@
   }
 }
 
-/* --------------------------------------------------------------------------
-   5. COMPONENTES
-   -------------------------------------------------------------------------- */
 @layer components {
-  /* ---- Layout ---- */
+  
   .container-x {
     @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
   }
@@ -286,7 +248,7 @@
     @apply mt-5 max-w-2xl text-base leading-relaxed text-muted sm:text-lg;
   }
 
-  /* Linha divisória com fade nas pontas */
+  
   .rule {
     @apply h-px w-full;
     background: linear-gradient(
@@ -297,7 +259,7 @@
     );
   }
 
-  /* ---- Botões ---- */
+  
   .btn {
     @apply relative inline-flex items-center justify-center gap-2 rounded-full
            px-6 py-3 text-sm font-semibold whitespace-nowrap
@@ -329,7 +291,7 @@
     transform: translateY(-2px);
   }
 
-  /* ---- Superfícies / Cards ---- */
+  
   .card {
     @apply relative overflow-hidden rounded-card border p-6 sm:p-7;
     background-color: var(--surface);
@@ -338,7 +300,7 @@
       transform 0.4s ease, background-color 0.4s ease;
   }
 
-  /* Borda que "acende" + holofote que segue o rato (vars --mx/--my via JS) */
+  
   .card-glow::before {
     content: "";
     position: absolute;
@@ -365,7 +327,7 @@
     opacity: 1;
   }
 
-  /* ---- Badges / pills ---- */
+  
   .pill {
     @apply inline-flex items-center gap-2 rounded-full border px-3 py-1.5
            text-xs font-medium text-muted;
@@ -394,7 +356,7 @@
     transform: scale(1.08);
   }
 
-  /* ---- Links de navegação com sublinhado animado ---- */
+  
   .nav-link {
     @apply relative py-1 text-sm font-medium text-muted transition-colors duration-200;
   }
@@ -419,7 +381,7 @@
     transform: scaleX(1);
   }
 
-  /* ---- Seletor de idioma ---- */
+  
   .lang-menu {
     @apply invisible absolute right-0 top-12 z-50 w-44 translate-y-1 rounded-xl
            border p-1.5 opacity-0;
@@ -449,7 +411,7 @@
     @apply w-7 shrink-0 text-xs font-semibold uppercase tracking-wider text-subtle;
   }
 
-  /* ---- Filtros do portfólio ---- */
+  
   .filter-btn {
     @apply rounded-full border px-4 py-2 text-sm font-medium text-muted
            transition-all duration-300;
@@ -465,7 +427,7 @@
     color: var(--accent-contrast);
   }
 
-  /* ---- Formulário ---- */
+  
   .field {
     @apply w-full rounded-xl border px-4 py-3 text-sm text-fg
            placeholder:text-subtle;
@@ -493,11 +455,6 @@
   }
 }
 
-/* --------------------------------------------------------------------------
-   6. UTILITÁRIOS PRÓPRIOS
-   -------------------------------------------------------------------------- */
-
-/* Texto com gradiente de acento */
 @utility text-gradient {
   background-image: linear-gradient(
     100deg,
@@ -506,11 +463,10 @@
   );
   background-clip: text;
   color: transparent;
-  /* Evita corte de descendentes (g, y, p) por causa do clip */
+  
   padding-bottom: 0.08em;
 }
 
-/* Grelha técnica de fundo, com fade radial para não competir com o texto */
 @utility bg-grid {
   background-image: linear-gradient(to right, var(--border) 1px, transparent 1px),
     linear-gradient(to bottom, var(--border) 1px, transparent 1px);
@@ -518,7 +474,6 @@
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
 }
 
-/* Máscara de fade para marquees e carrosséis */
 @utility mask-fade-x {
   mask-image: linear-gradient(
     90deg,
@@ -529,11 +484,6 @@
   );
 }
 
-/* --------------------------------------------------------------------------
-   ANIMAÇÕES DE ENTRADA (scroll-triggered)
-   O estado inicial só é aplicado quando o JS está ativo (`html.js`), para o
-   conteúdo continuar visível se o JS falhar ou for bloqueado.
-   -------------------------------------------------------------------------- */
 .js .reveal {
   opacity: 0;
   transform: translate3d(0, 28px, 0);
@@ -543,9 +493,6 @@
   will-change: opacity, transform;
 }
 
-/* O deslize lateral só faz sentido quando a grelha se divide em colunas.
-   Em ecrãs estreitos a coluna ocupa toda a largura e o translateX criaria
-   scroll horizontal — por isso mantém-se vertical até ao breakpoint lg. */
 @media (min-width: 1024px) {
   .js .reveal-left {
     transform: translate3d(-32px, 0, 0);
@@ -565,7 +512,6 @@
   will-change: auto;
 }
 
-/* Entrada do hero: palavras divididas por JS em spans com máscara */
 .word-mask {
   display: inline-block;
   overflow: hidden;
@@ -582,7 +528,6 @@
   transform: none;
 }
 
-/* Elementos do hero que entram por fade simples após o load */
 .hero-fade {
   opacity: 0;
   transform: translate3d(0, 16px, 0);
@@ -603,8 +548,6 @@
   }
 }
 
-/* Troca de idioma: o conteúdo esmorece durante a substituição do texto
-   (ver i18n.js). Só a opacidade muda, por isso o layout fica intacto. */
 main,
 footer,
 #site-header nav {
@@ -616,10 +559,6 @@ footer,
   opacity: 0;
 }
 
-/* --------------------------------------------------------------------------
-   CURSOR PERSONALIZADO
-   Só em dispositivos com rato (pointer: fine) e apenas se o JS o ativar.
-   -------------------------------------------------------------------------- */
 @media (pointer: fine) {
   .has-cursor,
   .has-cursor a,
@@ -654,13 +593,12 @@ footer,
   transition: opacity 0.3s ease, width 0.28s ease, height 0.28s ease,
     margin 0.28s ease, border-color 0.28s ease, background-color 0.28s ease;
 }
-/* `cursor-ready` só é adicionado ao primeiro movimento do rato: evita que o
-   anel fique parado no centro do ecrã em quem chega e ainda não mexeu. */
+
 .has-cursor.cursor-ready .cursor-dot,
 .has-cursor.cursor-ready .cursor-ring {
   opacity: 1;
 }
-/* Estado "hover" sobre elementos interativos */
+
 .cursor-ring.is-active {
   width: 58px;
   height: 58px;
@@ -669,10 +607,6 @@ footer,
   background-color: color-mix(in oklab, var(--accent) 12%, transparent);
 }
 
-/* --------------------------------------------------------------------------
-   CARROSSEL DE TESTEMUNHOS
-   Scroll-snap nativo (performante, acessível, funciona sem JS) + controlos JS.
-   -------------------------------------------------------------------------- */
 .slider {
   display: grid;
   grid-auto-flow: column;
@@ -682,6 +616,10 @@ footer,
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  
+  padding-top: 0.5rem;
+  padding-bottom: 0.35rem;
+  margin-top: -0.5rem;
 }
 .slider::-webkit-scrollbar {
   display: none;
@@ -708,17 +646,11 @@ footer,
   background-color: var(--accent);
 }
 
-/* --------------------------------------------------------------------------
-   MISC
-   -------------------------------------------------------------------------- */
-
-/* Bloqueia o scroll do body quando o menu mobile está aberto */
 .is-menu-open body,
 body.is-locked {
   overflow: hidden;
 }
 
-/* Cartões de projeto: overlay e zoom da imagem */
 .project-card .project-media img,
 .project-card .project-media svg {
   transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
@@ -740,7 +672,7 @@ body.is-locked {
   opacity: 1;
 }
 
-/* Estado de saída/entrada dos cartões ao filtrar por categoria */
 .project-card.is-filtered-out {
   display: none;
 }
+

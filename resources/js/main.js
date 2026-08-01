@@ -1,83 +1,48 @@
-/**
- * main.js — interações e animações do site
- * ---------------------------------------------------------------------------
- * Sem dependências externas. Tudo é progressivo: se um bloco falhar, o resto
- * do site continua a funcionar e o conteúdo mantém-se legível.
- *
- * Módulos (por ordem de inicialização):
- *   1.  Tema (dark/light)          8.  Filtros do portfólio
- *   2.  Header + progresso         9.  Carrossel de testemunhos
- *   3.  Menu mobile               10.  Cursor personalizado
- *   4.  Entrada do hero           11.  Contadores animados
- *   5.  Revelações ao scroll      12.  Botão flutuante de contacto
- *   6.  Navegação ativa           13.  Formulário de contacto
- *   7.  Brilho dos cartões        14.  Ano no rodapé
- *                                 15.  Troca de idioma (ver i18n.js)
- */
 (function () {
   "use strict";
 
   const root = document.documentElement;
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  );
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  /** Atalhos de seleção. */
   const $ = (sel, ctx = document) => ctx.querySelector(sel);
   const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
-
-  /**
-   * Texto traduzido (ver i18n.js). Se o i18n não tiver carregado, devolve ""
-   * e cada chamada usa o seu próprio texto de reserva em português.
-   */
   const t = (key, vars) => (window.I18N ? window.I18N.t(key, vars) : "");
 
-  /** Executa `fn` no máximo uma vez por frame (para handlers de scroll/mouse). */
   function rafThrottle(fn) {
-    let ticking = false;
+    let locked = false;
     return function (...args) {
-      if (ticking) return;
-      ticking = true;
+      if (locked) return;
+      locked = true;
       requestAnimationFrame(() => {
-        ticking = false;
+        locked = false;
         fn.apply(this, args);
       });
     };
   }
 
-  /* =========================================================================
-     1. TEMA — dark por omissão, escolha guardada em localStorage
-     ========================================================================= */
   function initTheme() {
     const toggle = $("#theme-toggle");
     if (!toggle) return;
 
     const sync = () => {
-      const isLight = root.getAttribute("data-theme") === "light";
-      toggle.setAttribute("aria-pressed", String(isLight));
-      // Mantém a cor da barra do browser alinhada com o tema escolhido.
+      const light = root.getAttribute("data-theme") === "light";
+      toggle.setAttribute("aria-pressed", String(light));
       const meta = $('meta[name="theme-color"]:not([media])');
-      if (meta) meta.setAttribute("content", isLight ? "#ffffff" : "#0a0a0b");
+      if (meta) meta.setAttribute("content", light ? "#ffffff" : "#0a0a0b");
     };
 
     toggle.addEventListener("click", () => {
-      const next =
-        root.getAttribute("data-theme") === "light" ? "dark" : "light";
+      const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
       root.setAttribute("data-theme", next);
       try {
         localStorage.setItem("theme", next);
-      } catch (e) {
-        /* modo privado: a escolha vale só para esta sessão */
-      }
+      } catch (_) {}
       sync();
     });
 
     sync();
   }
 
-  /* =========================================================================
-     2. HEADER — fundo ao descer + barra de progresso de leitura
-     ========================================================================= */
   function initHeader() {
     const header = $("#site-header");
     const progress = $("#scroll-progress");
@@ -85,16 +50,13 @@
 
     const update = () => {
       const y = window.scrollY;
-
-      // Depois de 24px o header ganha fundo desfocado e borda.
       header.classList.toggle("bg-bg/70", y > 24);
       header.classList.toggle("backdrop-blur-xl", y > 24);
       header.classList.toggle("border-b", y > 24);
       header.classList.toggle("border-transparent", y <= 24);
 
       if (progress) {
-        const max =
-          document.documentElement.scrollHeight - window.innerHeight;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
         progress.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
       }
     };
@@ -103,9 +65,6 @@
     update();
   }
 
-  /* =========================================================================
-     3. MENU MOBILE
-     ========================================================================= */
   function initMobileMenu() {
     const toggle = $("#menu-toggle");
     const menu = $("#mobile-menu");
@@ -131,43 +90,38 @@
       setOpen(toggle.getAttribute("aria-expanded") !== "true");
     });
 
-    // Fecha ao escolher um destino ou ao carregar em Escape.
     $$("a", menu).forEach((link) =>
       link.addEventListener("click", () => setOpen(false))
     );
+
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") setOpen(false);
     });
-    // Se o ecrã crescer para desktop, garante que o body volta a fazer scroll.
+
     window.matchMedia("(min-width: 1024px)").addEventListener("change", (e) => {
       if (e.matches) setOpen(false);
     });
   }
 
-  /* =========================================================================
-     4. HERO — divide o título em palavras e dispara a entrada
-     ========================================================================= */
   function splitWords(el) {
-    const delayStep = Number(el.dataset.splitDelay || 60);
-    let index = 0;
+    const step = Number(el.dataset.splitDelay || 60);
+    let i = 0;
 
-    // Percorre apenas nós de texto para não destruir <span> internos
-    // (ex.: a palavra com gradiente) nem os seus estilos.
     const wrap = (node) => {
       if (node.nodeType === Node.TEXT_NODE) {
-        const words = node.textContent.split(/(\s+)/);
+        const parts = node.textContent.split(/(\s+)/);
         const frag = document.createDocumentFragment();
 
-        words.forEach((word) => {
-          if (!word.trim()) {
-            frag.appendChild(document.createTextNode(word));
+        parts.forEach((part) => {
+          if (!part.trim()) {
+            frag.appendChild(document.createTextNode(part));
             return;
           }
           const mask = document.createElement("span");
           mask.className = "word-mask";
           const inner = document.createElement("span");
-          inner.textContent = word;
-          inner.style.setProperty("--reveal-delay", index++ * delayStep + "ms");
+          inner.textContent = part;
+          inner.style.setProperty("--reveal-delay", i++ * step + "ms");
           mask.appendChild(inner);
           frag.appendChild(mask);
         });
@@ -186,43 +140,34 @@
 
   function initHero() {
     $$("[data-split]").forEach(splitWords);
-
-    // `is-loaded` liberta as animações de entrada (ver input.css).
     requestAnimationFrame(() => {
       requestAnimationFrame(() => root.classList.add("is-loaded"));
     });
   }
 
-  /* =========================================================================
-     5. REVELAÇÕES AO SCROLL
-     ========================================================================= */
   function initReveal() {
     const items = $$(".reveal");
     if (!items.length) return;
 
-    // Sem IntersectionObserver (ou sem movimento): mostra tudo de imediato.
-    if (!("IntersectionObserver" in window) || prefersReducedMotion.matches) {
+    if (!("IntersectionObserver" in window) || reduceMotion.matches) {
       items.forEach((el) => el.classList.add("is-visible"));
       return;
     }
 
-    const observer = new IntersectionObserver(
+    const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           entry.target.classList.add("is-visible");
-          observer.unobserve(entry.target); // anima uma só vez
+          io.unobserve(entry.target);
         });
       },
       { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
     );
 
-    items.forEach((el) => observer.observe(el));
+    items.forEach((el) => io.observe(el));
   }
 
-  /* =========================================================================
-     6. NAVEGAÇÃO ATIVA (scrollspy)
-     ========================================================================= */
   function initScrollSpy() {
     const links = $$(".nav-link[href^='#']");
     if (!links.length || !("IntersectionObserver" in window)) return;
@@ -233,27 +178,21 @@
       if (section) map.set(section, link);
     });
 
-    const observer = new IntersectionObserver(
+    const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const link = map.get(entry.target);
-          if (!link) return;
-          if (entry.isIntersecting) {
-            links.forEach((l) => l.removeAttribute("aria-current"));
-            link.setAttribute("aria-current", "true");
-          }
+          if (!link || !entry.isIntersecting) return;
+          links.forEach((l) => l.removeAttribute("aria-current"));
+          link.setAttribute("aria-current", "true");
         });
       },
-      // A "linha de leitura" fica a ~35% da altura do ecrã.
       { rootMargin: "-35% 0px -60% 0px" }
     );
 
-    map.forEach((_, section) => observer.observe(section));
+    map.forEach((_, section) => io.observe(section));
   }
 
-  /* =========================================================================
-     7. BRILHO DOS CARTÕES — holofote que segue o rato
-     ========================================================================= */
   function initCardGlow() {
     const cards = $$("[data-glow]");
     if (!cards.length || !window.matchMedia("(pointer: fine)").matches) return;
@@ -262,18 +201,15 @@
       card.addEventListener(
         "pointermove",
         rafThrottle((e) => {
-          const rect = card.getBoundingClientRect();
-          card.style.setProperty("--mx", e.clientX - rect.left + "px");
-          card.style.setProperty("--my", e.clientY - rect.top + "px");
+          const r = card.getBoundingClientRect();
+          card.style.setProperty("--mx", e.clientX - r.left + "px");
+          card.style.setProperty("--my", e.clientY - r.top + "px");
         }),
         { passive: true }
       );
     });
   }
 
-  /* =========================================================================
-     8. FILTROS DO PORTFÓLIO
-     ========================================================================= */
   function initFilters() {
     const buttons = $$(".filter-btn");
     const cards = $$(".project-card");
@@ -283,7 +219,6 @@
     buttons.forEach((btn) => {
       btn.addEventListener("click", () => {
         const filter = btn.dataset.filter;
-
         buttons.forEach((b) =>
           b.setAttribute("aria-pressed", String(b === btn))
         );
@@ -292,12 +227,10 @@
         cards.forEach((card) => {
           const match = filter === "all" || card.dataset.category === filter;
           card.classList.toggle("is-filtered-out", !match);
-          if (match) {
-            visible++;
-            // Reinicia a animação de entrada para os cartões que reaparecem.
-            card.classList.remove("is-visible");
-            requestAnimationFrame(() => card.classList.add("is-visible"));
-          }
+          if (!match) return;
+          visible++;
+          card.classList.remove("is-visible");
+          requestAnimationFrame(() => card.classList.add("is-visible"));
         });
 
         if (empty) empty.classList.toggle("hidden", visible > 0);
@@ -305,11 +238,6 @@
     });
   }
 
-  /* =========================================================================
-     9. CARROSSEL DE TESTEMUNHOS
-     Assenta em scroll-snap nativo: os controlos apenas empurram o scroll,
-     por isso o gesto de arrastar no telemóvel continua a funcionar.
-     ========================================================================= */
   function initSlider() {
     const slider = $("#testimonials-slider");
     const prev = $("#slider-prev");
@@ -321,28 +249,27 @@
     if (!slides.length) return;
 
     let current = 0;
-    let autoplayId = null;
+    let timer = null;
 
     const goTo = (index, smooth = true) => {
       const target = slides[Math.max(0, Math.min(index, slides.length - 1))];
       if (!target) return;
       slider.scrollTo({
         left: target.offsetLeft - slider.offsetLeft,
-        behavior: smooth && !prefersReducedMotion.matches ? "smooth" : "auto",
+        behavior: smooth && !reduceMotion.matches ? "smooth" : "auto",
       });
     };
 
-    // Indicadores
     const dots = slides.map((_, i) => {
       const dot = document.createElement("button");
       dot.type = "button";
       dot.className = "dot";
       dot.setAttribute("role", "tab");
       dot.addEventListener("click", () => {
-        stopAutoplay();
+        stop();
         goTo(i);
       });
-      dotsBox && dotsBox.appendChild(dot);
+      if (dotsBox) dotsBox.appendChild(dot);
       return dot;
     });
 
@@ -359,28 +286,25 @@
     labelDots();
 
     const syncUI = () => {
-      dots.forEach((dot, i) =>
-        i === current
-          ? dot.setAttribute("aria-current", "true")
-          : dot.removeAttribute("aria-current")
-      );
-      // Nos extremos os botões ficam desativados (feedback claro).
+      dots.forEach((dot, i) => {
+        if (i === current) dot.setAttribute("aria-current", "true");
+        else dot.removeAttribute("aria-current");
+      });
       const maxScroll = slider.scrollWidth - slider.clientWidth - 4;
       if (prev) prev.disabled = slider.scrollLeft <= 4;
       if (next) next.disabled = slider.scrollLeft >= maxScroll;
     };
 
-    // Deduz o slide ativo a partir da posição de scroll.
-    const detectCurrent = rafThrottle(() => {
+    const onScroll = rafThrottle(() => {
       const center = slider.scrollLeft + slider.clientWidth / 2;
       let closest = 0;
-      let min = Infinity;
+      let best = Infinity;
       slides.forEach((slide, i) => {
-        const slideCenter =
+        const mid =
           slide.offsetLeft - slider.offsetLeft + slide.offsetWidth / 2;
-        const distance = Math.abs(slideCenter - center);
-        if (distance < min) {
-          min = distance;
+        const d = Math.abs(mid - center);
+        if (d < best) {
+          best = d;
           closest = i;
         }
       });
@@ -388,56 +312,69 @@
       syncUI();
     });
 
-    slider.addEventListener("scroll", detectCurrent, { passive: true });
-    prev && prev.addEventListener("click", () => { stopAutoplay(); goTo(current - 1); });
-    next && next.addEventListener("click", () => { stopAutoplay(); goTo(current + 1); });
+    slider.addEventListener("scroll", onScroll, { passive: true });
+    if (prev) {
+      prev.addEventListener("click", () => {
+        stop();
+        goTo(current - 1);
+      });
+    }
+    if (next) {
+      next.addEventListener("click", () => {
+        stop();
+        goTo(current + 1);
+      });
+    }
 
-    // Navegação por teclado quando o carrossel tem foco.
     slider.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowRight") { e.preventDefault(); stopAutoplay(); goTo(current + 1); }
-      if (e.key === "ArrowLeft") { e.preventDefault(); stopAutoplay(); goTo(current - 1); }
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        stop();
+        goTo(current + 1);
+      }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        stop();
+        goTo(current - 1);
+      }
     });
 
-    /* --- Autoplay: pausa no hover, no foco e com o separador em segundo plano --- */
-    function startAutoplay() {
-      if (autoplayId || prefersReducedMotion.matches) return;
-      autoplayId = setInterval(() => {
+    function start() {
+      if (timer || reduceMotion.matches) return;
+      timer = setInterval(() => {
         const atEnd =
           slider.scrollLeft >= slider.scrollWidth - slider.clientWidth - 4;
         goTo(atEnd ? 0 : current + 1);
       }, 6000);
     }
-    function stopAutoplay() {
-      clearInterval(autoplayId);
-      autoplayId = null;
+
+    function stop() {
+      clearInterval(timer);
+      timer = null;
     }
 
-    slider.addEventListener("pointerenter", stopAutoplay);
-    slider.addEventListener("focusin", stopAutoplay);
-    slider.addEventListener("pointerleave", startAutoplay);
-    document.addEventListener("visibilitychange", () =>
-      document.hidden ? stopAutoplay() : startAutoplay()
-    );
+    slider.addEventListener("pointerenter", stop);
+    slider.addEventListener("focusin", stop);
+    slider.addEventListener("pointerleave", start);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) stop();
+      else start();
+    });
 
-    // Só começa a rodar quando a secção estiver à vista.
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(
         (entries) => {
-          entries.forEach((e) => (e.isIntersecting ? startAutoplay() : stopAutoplay()));
+          entries.forEach((e) => (e.isIntersecting ? start() : stop()));
         },
         { threshold: 0.35 }
       ).observe(slider);
     } else {
-      startAutoplay();
+      start();
     }
 
     syncUI();
   }
 
-  /* =========================================================================
-     10. CURSOR PERSONALIZADO
-     Ativado apenas quando o script crítico adicionou `has-cursor` ao <html>.
-     ========================================================================= */
   function initCursor() {
     if (!root.classList.contains("has-cursor")) return;
 
@@ -445,42 +382,36 @@
     const ring = $(".cursor-ring");
     if (!dot || !ring) return;
 
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let ringX = mouseX;
-    let ringY = mouseY;
+    let mx = window.innerWidth / 2;
+    let my = window.innerHeight / 2;
+    let rx = mx;
+    let ry = my;
 
     document.addEventListener(
       "pointermove",
       (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        // Revela o cursor apenas no primeiro movimento real.
+        mx = e.clientX;
+        my = e.clientY;
         root.classList.add("cursor-ready");
-        // O ponto acompanha o rato sem atraso...
-        dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+        dot.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
       },
       { passive: true }
     );
 
-    // ...e o anel segue com interpolação, criando o efeito de "elástico".
-    (function loop() {
-      ringX += (mouseX - ringX) * 0.16;
-      ringY += (mouseY - ringY) * 0.16;
-      ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0)`;
-      requestAnimationFrame(loop);
+    (function tick() {
+      rx += (mx - rx) * 0.16;
+      ry += (my - ry) * 0.16;
+      ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
+      requestAnimationFrame(tick);
     })();
 
-    // Cresce sobre elementos interativos.
-    const interactive = "a, button, input, textarea, select, [data-cursor]";
+    const hit = "a, button, input, textarea, select, [data-cursor]";
     document.addEventListener("pointerover", (e) => {
-      if (e.target.closest(interactive)) ring.classList.add("is-active");
+      if (e.target.closest(hit)) ring.classList.add("is-active");
     });
     document.addEventListener("pointerout", (e) => {
-      if (e.target.closest(interactive)) ring.classList.remove("is-active");
+      if (e.target.closest(hit)) ring.classList.remove("is-active");
     });
-
-    // Esconde quando o rato sai da janela.
     document.addEventListener("pointerleave", () => {
       dot.style.opacity = ring.style.opacity = "0";
     });
@@ -489,48 +420,43 @@
     });
   }
 
-  /* =========================================================================
-     11. CONTADORES ANIMADOS
-     ========================================================================= */
   function initCounters() {
-    const counters = $$("[data-count-to]");
-    if (!counters.length) return;
+    const nodes = $$("[data-count-to]");
+    if (!nodes.length) return;
 
-    if (!("IntersectionObserver" in window) || prefersReducedMotion.matches) {
-      counters.forEach((el) => (el.textContent = el.dataset.countTo));
+    if (!("IntersectionObserver" in window) || reduceMotion.matches) {
+      nodes.forEach((el) => {
+        el.textContent = el.dataset.countTo;
+      });
       return;
     }
 
-    const observer = new IntersectionObserver(
+    const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           const el = entry.target;
-          observer.unobserve(el);
+          io.unobserve(el);
 
           const target = Number(el.dataset.countTo);
           const duration = 1400;
           const start = performance.now();
 
-          const tick = (now) => {
+          const frame = (now) => {
             const p = Math.min((now - start) / duration, 1);
-            // easeOutExpo: rápido no início, assenta suavemente no fim.
             const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
             el.textContent = String(Math.round(target * eased));
-            if (p < 1) requestAnimationFrame(tick);
+            if (p < 1) requestAnimationFrame(frame);
           };
-          requestAnimationFrame(tick);
+          requestAnimationFrame(frame);
         });
       },
       { threshold: 0.6 }
     );
 
-    counters.forEach((el) => observer.observe(el));
+    nodes.forEach((el) => io.observe(el));
   }
 
-  /* =========================================================================
-     12. BOTÃO FLUTUANTE DE CONTACTO
-     ========================================================================= */
   function initFab() {
     const toggle = $("#fab-toggle");
     const actions = $("#fab-actions");
@@ -550,15 +476,14 @@
       actions.classList.toggle("opacity-0", !open);
       actions.classList.toggle("pointer-events-none", !open);
       actions.classList.toggle("translate-y-2", !open);
-      iconOpen && iconOpen.classList.toggle("hidden", open);
-      iconClose && iconClose.classList.toggle("hidden", !open);
+      if (iconOpen) iconOpen.classList.toggle("hidden", open);
+      if (iconClose) iconClose.classList.toggle("hidden", !open);
     };
 
     toggle.addEventListener("click", () => {
       setOpen(toggle.getAttribute("aria-expanded") !== "true");
     });
 
-    // Fecha ao clicar fora ou com Escape.
     document.addEventListener("click", (e) => {
       if (!toggle.contains(e.target) && !actions.contains(e.target)) {
         setOpen(false);
@@ -569,12 +494,6 @@
     });
   }
 
-  /* =========================================================================
-     13. FORMULÁRIO DE CONTACTO
-     Validação no cliente + envio.
-     - Com `data-endpoint` preenchido: POST em JSON (Formspree, Web3Forms...).
-     - Sem endpoint: abre o cliente de email já preenchido (fallback fiável).
-     ========================================================================= */
   function initContactForm() {
     const form = $("#contact-form");
     if (!form) return;
@@ -586,33 +505,28 @@
 
     const showError = (name, show) => {
       const field = form.elements[name];
-      const message = form.querySelector(`[data-error-for="${name}"]`);
+      const msg = form.querySelector(`[data-error-for="${name}"]`);
       if (field) field.setAttribute("aria-invalid", String(show));
-      if (message) message.classList.toggle("is-shown", show);
+      if (msg) msg.classList.toggle("is-shown", show);
     };
 
     const validate = () => {
-      const values = {
-        nome: form.elements.nome.value.trim(),
-        email: form.elements.email.value.trim(),
-        mensagem: form.elements.mensagem.value.trim(),
-      };
+      const nome = form.elements.nome.value.trim();
+      const email = form.elements.email.value.trim();
+      const mensagem = form.elements.mensagem.value.trim();
 
       const errors = {
-        nome: values.nome.length < 2,
-        // Regex propositadamente permissiva: valida a forma, não a existência.
-        email: !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email),
-        mensagem: values.mensagem.length < 10,
+        nome: nome.length < 2,
+        email: !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email),
+        mensagem: mensagem.length < 10,
         rgpd: !form.elements.rgpd.checked,
       };
 
       Object.keys(errors).forEach((key) => showError(key, errors[key]));
 
-      const firstInvalid = Object.keys(errors).find((k) => errors[k]);
-      if (firstInvalid && form.elements[firstInvalid]) {
-        form.elements[firstInvalid].focus();
-      }
-      return !firstInvalid;
+      const bad = Object.keys(errors).find((k) => errors[k]);
+      if (bad && form.elements[bad]) form.elements[bad].focus();
+      return !bad;
     };
 
     const setStatus = (message, type) => {
@@ -632,19 +546,17 @@
       if (spinner) spinner.classList.toggle("hidden", !loading);
     };
 
-    // Limpa o erro assim que o utilizador corrige o campo.
     ["nome", "email", "mensagem"].forEach((name) => {
       const field = form.elements[name];
-      field &&
-        field.addEventListener("input", () => {
-          if (field.getAttribute("aria-invalid") === "true") showError(name, false);
-        });
+      if (!field) return;
+      field.addEventListener("input", () => {
+        if (field.getAttribute("aria-invalid") === "true") showError(name, false);
+      });
     });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // Honeypot preenchido = bot. Finge sucesso e não envia nada.
       if (form.elements._gotcha && form.elements._gotcha.value) {
         setStatus(t("form.statusThanks") || "Mensagem enviada. Obrigado!", "success");
         return;
@@ -662,7 +574,6 @@
       const endpoint = form.dataset.endpoint;
 
       if (!endpoint) {
-        // Sem backend: compõe um email pré-preenchido.
         const to = form.dataset.fallbackEmail || "";
         const subject =
           t("form.mailSubject", { name: data.nome }) ||
@@ -712,8 +623,9 @@
 
         if (response.status === 422) {
           const payload = await response.json().catch(() => ({}));
-          const fields = payload.errors || {};
-          Object.keys(fields).forEach((name) => showError(name, true));
+          Object.keys(payload.errors || {}).forEach((name) =>
+            showError(name, true)
+          );
           setStatus(
             t("form.statusReview") || "Reveja os campos assinalados, por favor.",
             "error"
@@ -721,7 +633,7 @@
           return;
         }
 
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        if (!response.ok) throw new Error(String(response.status));
 
         form.reset();
         setStatus(
@@ -729,7 +641,7 @@
             "Mensagem enviada. Respondo em menos de 24 horas úteis.",
           "success"
         );
-      } catch (error) {
+      } catch (_) {
         const email = form.dataset.fallbackEmail || "ola@alexandremagno.dev";
         setStatus(
           t("form.statusFail", { email }) ||
@@ -742,17 +654,11 @@
     });
   }
 
-  /* =========================================================================
-     14. ANO NO RODAPÉ
-     ========================================================================= */
   function initYear() {
-    const year = $("#ano");
-    if (year) year.textContent = String(new Date().getFullYear());
+    const el = $("#ano");
+    if (el) el.textContent = String(new Date().getFullYear());
   }
 
-  /* =========================================================================
-     ARRANQUE
-     ========================================================================= */
   function init() {
     initTheme();
     initHeader();

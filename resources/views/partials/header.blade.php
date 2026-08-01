@@ -1,6 +1,3 @@
-<!-- ====================================================================
-     HEADER
-     ==================================================================== -->
 <header
   id="site-header"
   class="fixed inset-x-0 top-0 z-50 border-b border-transparent transition-all duration-300"
@@ -18,7 +15,7 @@
         </span>
       </a>
 
-      <!-- Navegação desktop -->
+      <!-- NavegaÃ§Ã£o desktop -->
       <nav class="hidden items-center gap-8 lg:flex" aria-label="{{ __('nav.mainAria') }}">
         <a href="#sobre" class="nav-link">{{ __('nav.about') }}</a>
         <a href="#servicos" class="nav-link">{{ __('nav.services') }}</a>
@@ -27,13 +24,13 @@
         <a href="#parceria" class="nav-link">{{ __('nav.partnership') }}</a>
       </nav>
 
-      <!-- Ações -->
+      <!-- AÃ§Ãµes -->
       <div class="flex items-center gap-2 sm:gap-3">
-        {{-- Troca de idioma por URL. O aspeto do menu mantém-se; cada opção
+        {{-- Troca de idioma por URL. O aspeto do menu mantÃ©m-se; cada opÃ§Ã£o
              navega para /pt, /en ou /es em vez de reescrever o DOM. --}}
         @php
           $currentLocale = app()->getLocale();
-          $localeLabels = ['pt' => 'Português', 'en' => 'English', 'es' => 'Español'];
+          $localeLabels = ['pt' => 'PortuguÃªs', 'en' => 'English', 'es' => 'EspaÃ±ol'];
         @endphp
         <div class="relative" id="lang-switch">
           <button type="button" id="lang-toggle" class="flex h-10 items-center gap-1.5 rounded-full border px-3 text-xs font-semibold uppercase tracking-wider text-muted transition-colors duration-300 hover:border-line-strong hover:text-fg" aria-haspopup="true" aria-expanded="false" aria-controls="lang-menu" aria-label="{{ __('lang.aria') }}" data-cursor="hover">
@@ -74,11 +71,11 @@
 
         <!-- Toggle de tema -->
         <button type="button" id="theme-toggle" class="grid h-10 w-10 place-items-center rounded-full border text-muted transition-colors duration-300 hover:border-line-strong hover:text-fg" aria-label="{{ __('theme.aria') }}" aria-pressed="false">
-          <!-- Ícone lua (visível no tema dark) -->
+          <!-- Ãcone lua (visÃ­vel no tema dark) -->
           <svg class="h-[18px] w-[18px] light:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
           </svg>
-          <!-- Ícone sol (visível no tema light) -->
+          <!-- Ãcone sol (visÃ­vel no tema light) -->
           <svg class="hidden h-[18px] w-[18px] light:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="4" />
             <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" />
@@ -87,7 +84,7 @@
 
         <a href="#contacto" class="btn btn-primary hidden sm:inline-flex" data-cursor="hover">{{ __('nav.cta') }}</a>
 
-        <!-- Botão do menu mobile -->
+        <!-- BotÃ£o do menu mobile -->
         <button
           type="button"
           id="menu-toggle"

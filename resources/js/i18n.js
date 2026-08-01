@@ -1,8 +1,3 @@
-/**
- * Menu de idioma no header.
- * A troca de língua é por URL (/pt, /en, /es). Aqui só abre e fecha o menu.
- * As mensagens de runtime (formulário, aria) vêm de window.I18N no layout.
- */
 (function () {
   "use strict";
 

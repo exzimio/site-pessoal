@@ -14,8 +14,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Fallback para rotas com {locale} quando o pedido não passa
-        // pelo middleware SetLocale (ex.: backoffice).
         URL::defaults([
             'locale' => session('locale', config('app.locale', 'pt')),
         ]);

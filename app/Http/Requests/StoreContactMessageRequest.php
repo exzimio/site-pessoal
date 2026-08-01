@@ -13,8 +13,6 @@ class StoreContactMessageRequest extends FormRequest
 
     public function rules(): array
     {
-        // Honeypot preenchido: deixa passar sem regras. O controller responde
-        // com sucesso e não grava, para o bot não perceber o filtro.
         if (filled($this->input('_gotcha'))) {
             return [];
         }

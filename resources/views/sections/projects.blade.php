@@ -1,6 +1,3 @@
-<!-- ==================================================================
-     4. PORTFÓLIO
-     ================================================================== -->
 <section id="projetos" class="section">
   <div class="container-x">
     <header class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">

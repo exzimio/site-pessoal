@@ -1,6 +1,3 @@
-<!-- ==================================================================
-     3. SERVIÇOS
-     ================================================================== -->
 <section id="servicos" class="section bg-bg-soft">
   <div class="container-x">
     <header class="max-w-3xl">
@@ -28,7 +25,7 @@
           </p>
           <ul class="mt-5 space-y-2 text-sm text-subtle">
             @foreach ($service->t('bullets') ?? [] as $bullet)
-              <li class="flex items-start gap-2"><span class="mt-1 text-accent" aria-hidden="true">→</span> {{ $bullet }}</li>
+              <li class="flex items-start gap-2"><span class="mt-1 text-accent" aria-hidden="true">â†’</span> {{ $bullet }}</li>
             @endforeach
           </ul>
           <p class="mt-6 border-t pt-4 font-mono text-xs text-subtle">
@@ -37,7 +34,7 @@
             @if ($service->is_monthly)
               {{ __('services.per_month') }}
             @elseif ($service->t('duration_label'))
-              · {{ $service->t('duration_label') }}
+              Â· {{ $service->t('duration_label') }}
             @endif
           </p>
         </li>

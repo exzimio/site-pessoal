@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Admin\Concerns\SyncsTranslations;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
@@ -12,9 +13,9 @@ use Illuminate\View\View;
 
 class ServiceController extends Controller
 {
-    private const ICONS = ['monitor', 'code', 'database', 'cart', 'wrench'];
+    use SyncsTranslations;
 
-    private const LOCALES = ['pt', 'en', 'es'];
+    private const ICONS = ['monitor', 'code', 'database', 'cart', 'wrench'];
 
     public function index(): View
     {
@@ -97,29 +98,13 @@ class ServiceController extends Controller
             'is_monthly' => ['nullable', 'boolean'],
             'sort_order' => ['required', 'integer', 'min:0', 'max:65535'],
             'is_active' => ['nullable', 'boolean'],
-            'translations' => ['required', 'array'],
-            'translations.pt.title' => ['required', 'string', 'max:255'],
-            'translations.pt.description' => ['required', 'string'],
-            'translations.pt.bullets' => ['nullable', 'string'],
-            'translations.pt.duration_label' => ['nullable', 'string', 'max:120'],
-            'translations.en.title' => ['required', 'string', 'max:255'],
-            'translations.en.description' => ['required', 'string'],
-            'translations.en.bullets' => ['nullable', 'string'],
-            'translations.en.duration_label' => ['nullable', 'string', 'max:120'],
-            'translations.es.title' => ['required', 'string', 'max:255'],
-            'translations.es.description' => ['required', 'string'],
-            'translations.es.bullets' => ['nullable', 'string'],
-            'translations.es.duration_label' => ['nullable', 'string', 'max:120'],
+            ...$this->localeRules([
+                'title' => ['required', 'string', 'max:255'],
+                'description' => ['required', 'string'],
+                'bullets' => ['nullable', 'string'],
+                'duration_label' => ['nullable', 'string', 'max:120'],
+            ]),
         ]);
-
-        $attrs = [
-            'slug' => Str::slug($validated['slug']),
-            'icon' => $validated['icon'],
-            'price_cents' => (int) round(((float) $validated['price_euros']) * 100),
-            'is_monthly' => $request->boolean('is_monthly'),
-            'sort_order' => (int) $validated['sort_order'],
-            'is_active' => $request->boolean('is_active'),
-        ];
 
         $translations = [];
         foreach (self::LOCALES as $locale) {
@@ -132,17 +117,17 @@ class ServiceController extends Controller
             ];
         }
 
-        return compact('attrs', 'translations');
-    }
-
-    private function syncTranslations(Service $service, array $translations): void
-    {
-        foreach ($translations as $locale => $fields) {
-            $service->translations()->updateOrCreate(
-                ['locale' => $locale],
-                $fields
-            );
-        }
+        return [
+            'attrs' => [
+                'slug' => Str::slug($validated['slug']),
+                'icon' => $validated['icon'],
+                'price_cents' => (int) round(((float) $validated['price_euros']) * 100),
+                'is_monthly' => $request->boolean('is_monthly'),
+                'sort_order' => (int) $validated['sort_order'],
+                'is_active' => $request->boolean('is_active'),
+            ],
+            'translations' => $translations,
+        ];
     }
 
     private function parseBullets(string $text): array

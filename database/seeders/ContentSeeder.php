@@ -34,6 +34,7 @@ class ContentSeeder extends Seeder
             ['slug' => 'ajax', 'name' => 'AJAX', 'icon' => 'ajax'],
             ['slug' => 'git', 'name' => 'Git', 'icon' => 'git'],
             ['slug' => 'tailwind', 'name' => 'Tailwind', 'icon' => 'tailwind'],
+            ['slug' => 'bootstrap', 'name' => 'Bootstrap', 'icon' => 'bootstrap'],
             ['slug' => 'terminal', 'name' => 'Terminal', 'icon' => 'terminal'],
         ];
 

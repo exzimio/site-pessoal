@@ -1,9 +1,5 @@
-<!-- ==================================================================
-     6. PARCERIA (carrossel)
-     Sem testemunhos reais de clientes, o carrossel apresenta os
-     compromissos assumidos — mesma estrutura, conteúdo honesto.
-     ================================================================== -->
-<section id="parceria" class="section overflow-hidden">
+{{-- overflow-x-clip: hover dos cartões sobe 4px; overflow-hidden cortava o glow --}}
+<section id="parceria" class="section overflow-x-clip">
   <div class="container-x">
     <header class="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
       <div class="max-w-2xl">

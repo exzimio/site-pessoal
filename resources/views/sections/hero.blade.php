@@ -1,14 +1,11 @@
-<!-- ==================================================================
-     1. HERO
-     ================================================================== -->
 <section
   id="inicio"
   class="relative flex min-h-[100svh] items-center overflow-hidden pt-28 pb-24 sm:pt-32 lg:pb-32"
 >
-  <!-- Fundo: gradiente animado + grelha técnica -->
+  <!-- Fundo: gradiente animado + grelha tÃ©cnica -->
   <div class="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
     <div class="absolute inset-0 bg-grid opacity-60"></div>
-    <!-- Duas "blobs" de acento em movimento lento (GPU: só transform) -->
+    <!-- Duas "blobs" de acento em movimento lento (GPU: sÃ³ transform) -->
     <div
       class="absolute -top-40 left-1/2 h-[38rem] w-[38rem] -translate-x-1/2 rounded-full opacity-25 blur-[120px] animate-drift"
       style="background: radial-gradient(circle, var(--accent) 0%, transparent 65%)"
@@ -17,7 +14,7 @@
       class="absolute -bottom-56 -right-32 h-[32rem] w-[32rem] rounded-full opacity-20 blur-[120px] animate-drift [animation-delay:-8s]"
       style="background: radial-gradient(circle, var(--accent-2) 0%, transparent 65%)"
     ></div>
-    <!-- Vinheta inferior para transição suave para a secção seguinte -->
+    <!-- Vinheta inferior para transiÃ§Ã£o suave para a secÃ§Ã£o seguinte -->
     <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bg to-transparent"></div>
   </div>
 
@@ -32,7 +29,7 @@
         <span>{{ __('hero.badge') }}</span>
       </p>
 
-      <!-- Headline: cada palavra entra de baixo com máscara.
+      <!-- Headline: cada palavra entra de baixo com mÃ¡scara.
            O atributo data-split diz ao JS para dividir em palavras. -->
       <h1 class="mt-7 text-display-lg font-semibold" data-split data-split-delay="70">{!! __('hero.title') !!}</h1>
 
@@ -52,7 +49,7 @@
         <a href="#projetos" class="btn btn-ghost" data-cursor="hover">{{ __('hero.cta2') }}</a>
       </div>
 
-      <!-- Factos verificáveis: formação concluída e forma de trabalhar.
+      <!-- Factos verificÃ¡veis: formaÃ§Ã£o concluÃ­da e forma de trabalhar.
            Sem anos de mercado nem contagens de clientes. -->
       <dl
         class="mt-16 grid max-w-2xl grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4 hero-fade"

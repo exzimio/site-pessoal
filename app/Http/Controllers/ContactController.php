@@ -10,8 +10,7 @@ class ContactController extends Controller
 {
     public function store(StoreContactMessageRequest $request): JsonResponse
     {
-        // Campo honeypot preenchido = bot. Resposta de sucesso sem gravar nada,
-        // para o bot não perceber que foi detetado.
+        // honeypot: fingir sucesso
         if (filled($request->input('_gotcha'))) {
             return response()->json(['ok' => true]);
         }
